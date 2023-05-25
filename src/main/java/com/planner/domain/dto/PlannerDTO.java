@@ -14,11 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class PlannerDTO {
     private int pNo;
-    private String pType;
-
+    private int pType;
     // FK
     List<AuthDTO> authEntityList;
     public PlannerEntity toEntity(){
-        return PlannerEntity.builder().pNo(this.pNo).pType(this.pType).build();
+        return PlannerEntity.builder().pNo(this.pNo).build();
     }
 }

@@ -5,8 +5,10 @@ import com.planner.domain.entity.user.UserEntity;
 import com.planner.domain.entity.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +27,8 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    PlannerService plannerService;
 
     @Transactional
     @Override
@@ -35,7 +39,9 @@ public class UserService implements UserDetailsService {
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(userEntity.getURole()));
 
+        log.info("loadUserByUsername Entity{}", userEntity);
         UserDTO userDTO = userEntity.toDTO();
+        log.info("loadUserByUsername DTO{}", userDTO);
         userDTO.setAuthorities(authorities);
 
         return userDTO;
@@ -60,14 +66,37 @@ public class UserService implements UserDetailsService {
         }
         userDTO.setUPassword(passwordEncoder.encode(userDTO.getUPassword()));
         userDTO.setURole("일반회원");
-        userRepository.save(userDTO.toEntity());
+
+        UserEntity userEntity = userDTO.toEntity();
+
+        // 개인 플래너 생성 실패
+        if(!plannerService.userPlannerInit(userEntity)){
+            log.info("User Init INFO {}");
+            return 4;
+        }
+
+        userRepository.save(userEntity);
         return 1;
     }
 
+    // 문자열 데이터 검증 -> 추후 유효성검사 추가
     public boolean checkEmpty(String str){
         if(str==null || str.equals("")){
             return false;
         }
         return true;
+    }
+
+    public UserEntity getUserInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if(principal.equals("anonymousUser")){
+            return null;
+        }
+        UserDTO userDTO = (UserDTO) principal;
+        Optional<UserEntity> userOptional = userRepository.findByuId(userDTO.getUId());
+        if(!userOptional.isPresent()){ return null; }
+        return userOptional.get();
     }
 }

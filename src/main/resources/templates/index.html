@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <a href="/login"> 로그인 </a>
+
+        <form class="todoForm">
+            제목 : <input type="text" name="tTitle">
+            내용 : <textarea name="tText"></textarea>
+            시작일 : <input type="datetime-local" name="sTime" class="timeData">
+            종료일 : <input type="datetime-local" name="eTime">
+            <button type="button" onclick="regist()">등록하기</button>
+        </form>
+    </div>
+
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+</html>

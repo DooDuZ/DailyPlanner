@@ -3,6 +3,7 @@ package com.planner.domain.entity.user;
 import com.planner.domain.dto.AuthDTO;
 import com.planner.domain.dto.TodoDTO;
 import com.planner.domain.dto.UserDTO;
+import com.planner.domain.entity.BaseEntity;
 import com.planner.domain.entity.auth.AuthEntity;
 import com.planner.domain.entity.todo.TodoEntity;
 import lombok.*;
@@ -19,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,34 +38,21 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "opener" , cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     List<TodoEntity> openList = new ArrayList<>();
 
     @OneToMany(mappedBy = "closer" , cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     List<TodoEntity> closeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     List<AuthEntity> authEntityList = new ArrayList<>();
 
     public UserDTO toDTO(){
-        ArrayList<TodoDTO> openDTOList = new ArrayList<>();
-        ArrayList<TodoDTO> closeDTOList = new ArrayList<>();
-        ArrayList<AuthDTO> authDTOList = new ArrayList<>();
-
-        for(TodoEntity entity : openList){
-            openDTOList.add(entity.toDTO());
-        }
-
-        for(TodoEntity entity : closeList){
-            closeDTOList.add(entity.toDTO());
-        }
-
-        for(AuthEntity entity : authEntityList){
-            authDTOList.add(entity.toDTO());
-        }
-
         return UserDTO.builder().uId(this.uId).uName(this.uName).uEmail(this.uEmail).uRole(this.uRole).uPassword(this.uPassword)
-                .openList(openDTOList).closeList(closeDTOList).authList(authDTOList).build();
+                .build();
     }
 }

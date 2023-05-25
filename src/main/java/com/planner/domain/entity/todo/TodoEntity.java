@@ -1,11 +1,14 @@
 package com.planner.domain.entity.todo;
 
 import com.planner.domain.dto.TodoDTO;
+import com.planner.domain.entity.BaseEntity;
 import com.planner.domain.entity.planner.PlannerEntity;
 import com.planner.domain.entity.user.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -16,7 +19,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoEntity {
+public class TodoEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tNo;

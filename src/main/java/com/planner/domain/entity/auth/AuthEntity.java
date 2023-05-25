@@ -1,6 +1,7 @@
 package com.planner.domain.entity.auth;
 
 import com.planner.domain.dto.AuthDTO;
+import com.planner.domain.entity.BaseEntity;
 import com.planner.domain.entity.planner.PlannerEntity;
 import com.planner.domain.entity.user.UserEntity;
 import lombok.*;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthEntity {
+public class AuthEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int aNo;

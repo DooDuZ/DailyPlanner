@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController{
     @Autowired
     UserService userService;
-
     @PostMapping("/sign-up")
     public int signUp(@RequestBody UserDTO userDTO){
         return userService.signUp(userDTO);
