@@ -1,16 +1,21 @@
 package com.planner.controller;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.planner.domain.dto.UserDTO;
+import com.planner.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
-public class UserController implements UserDetailsService {
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+public class UserController{
+    @Autowired
+    UserService userService;
+
+    @PostMapping("/sign-up")
+    public int signUp(@RequestBody UserDTO userDTO){
+        return userService.signUp(userDTO);
     }
 }

@@ -11,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 public class AuthDTO {
     private int aNo;
-
     // FK
     private int uNo;
     private int pno;

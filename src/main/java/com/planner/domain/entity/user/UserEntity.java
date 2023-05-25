@@ -64,7 +64,7 @@ public class UserEntity {
             authDTOList.add(entity.toDTO());
         }
 
-        return UserDTO.builder().uId(this.uId).uName(this.uName).uEmail(this.uEmail).uRole(this.uRole)
+        return UserDTO.builder().uId(this.uId).uName(this.uName).uEmail(this.uEmail).uRole(this.uRole).uPassword(this.uPassword)
                 .openList(openDTOList).closeList(closeDTOList).authList(authDTOList).build();
     }
 }

@@ -17,8 +17,7 @@ public class PlannerDTO {
     private String pType;
 
     // FK
-    List<AuthDTO> authEntityList = new ArrayList<>();
-
+    List<AuthDTO> authEntityList;
     public PlannerEntity toEntity(){
         return PlannerEntity.builder().pNo(this.pNo).pType(this.pType).build();
     }
