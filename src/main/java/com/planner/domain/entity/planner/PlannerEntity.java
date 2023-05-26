@@ -4,6 +4,7 @@ import com.planner.domain.dto.AuthDTO;
 import com.planner.domain.dto.PlannerDTO;
 import com.planner.domain.entity.BaseEntity;
 import com.planner.domain.entity.auth.AuthEntity;
+import com.planner.domain.entity.todo.TodoEntity;
 import com.planner.domain.entity.type.TypeEntity;
 import com.planner.domain.entity.user.UserEntity;
 import lombok.*;
@@ -31,6 +32,9 @@ public class PlannerEntity extends BaseEntity {
     @ToString.Exclude
     private TypeEntity type;
 
+    @OneToMany(mappedBy = "plannerEntity" , cascade = CascadeType.ALL)
+    @Builder.Default
+    List<TodoEntity> todoEntityList = new ArrayList<>();
     @OneToMany(mappedBy = "plannerEntity" , cascade = CascadeType.ALL)
     @Builder.Default
     List<AuthEntity> authEntityList = new ArrayList<>();

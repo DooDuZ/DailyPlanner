@@ -21,7 +21,7 @@ public class TypeEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tNo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String tName;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL)

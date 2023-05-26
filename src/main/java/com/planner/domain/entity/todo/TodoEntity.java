@@ -7,9 +7,7 @@ import com.planner.domain.entity.user.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "todo")
@@ -30,8 +28,8 @@ public class TodoEntity extends BaseEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String tText;
 
-    private Date sTime;
-    private Date eTime;
+    private LocalDateTime sTime;
+    private LocalDateTime eTime;
 
     @ColumnDefault("false")
     private boolean doOrNot;
@@ -54,7 +52,7 @@ public class TodoEntity extends BaseEntity {
     public TodoDTO toDTO(){
         return TodoDTO.builder().tNo(this.tNo).tText(this.tText)
                 .tTitle(this.tTitle).sTime(this.sTime).eTime(this.eTime)
-                .doOrNot(this.doOrNot).opener(this.opener.getUNo()).closer(this.closer.getUNo())
-                .pno(this.plannerEntity.getPNo()).build();
+                .doOrNot(this.doOrNot).opener(this.opener.getUNo()).closer( (this.closer == null) ? 0 : this.closer.getUNo() )
+                .pno(this.plannerEntity.getPNo()).openerName(this.opener.getUId()).closerName(this.closer== null ? "" : this.closer.getUId()).build();
     }
 }

@@ -1,6 +1,8 @@
 package com.planner.service;
 
 import com.planner.domain.dto.TodoDTO;
+import com.planner.domain.entity.auth.AuthEntity;
+import com.planner.domain.entity.auth.AuthRepository;
 import com.planner.domain.entity.planner.PlannerEntity;
 import com.planner.domain.entity.planner.PlannerRepository;
 import com.planner.domain.entity.todo.TodoEntity;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,22 +27,105 @@ public class TodoService {
     PlannerRepository plannerRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    AuthRepository authRepository;
 
     @Transactional
     public int createTodo(TodoDTO todoDTO){
+        log.info("createTodo param {}", todoDTO);
         UserEntity userEntity = userService.getUserInfo();
-        if(userEntity == null){ return 0; } // 로그인 정보 없음
-        log.info("createTodo DTO {}", todoDTO);
-        log.info("createTodo user {}", userEntity);
+
+        if(userEntity == null){ return 0; }// 로그인 정보 없음
+
         TodoEntity todoEntity = todoDTO.toEntity();
         todoEntity.setOpener(userEntity);
 
         Optional<PlannerEntity> optional = plannerRepository.findById(todoDTO.getPno());
         if(!optional.isPresent()){ return 2;} // 플래너 정보 없음
-        todoEntity.setPlannerEntity(optional.get());
+
+        PlannerEntity plannerEntity = optional.get();
+
+        if(!checkAuth(userEntity, plannerEntity)){ return 3; } // 권한 없음
+
+        todoEntity.setPlannerEntity(plannerEntity);
 
         todoRepository.save(todoEntity);
 
         return 1;
+    }
+
+    // 접근 권한 체크
+    // 순회 데이터의 크기가 커질 경우 sql query 작성 필요
+    public boolean checkAuth(UserEntity userEntity, PlannerEntity plannerEntity){
+        boolean ret = false;
+        for(AuthEntity authEntity : userEntity.getAuthEntityList()){
+            if(authEntity.getPlannerEntity()==plannerEntity){
+                ret = true;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    @Transactional
+    public int completed(TodoDTO todoDTO){
+        UserEntity userEntity = userService.getUserInfo();
+        if(userEntity == null){ return 0; } // 로그인 정보 없음
+
+        log.info("completed {}", todoDTO);
+        Optional<TodoEntity> todoOptional = todoRepository.findById(todoDTO.getTNo());
+        if(!todoOptional.isPresent()){ return 2; } // 게시물 정보 없음
+
+        TodoEntity todoEntity = todoOptional.get();
+        PlannerEntity plannerEntity = todoEntity.getPlannerEntity();
+
+        if(!checkAuth(userEntity, plannerEntity)){ return 3;} // 권한 없음
+
+        // 작업 완료
+        todoEntity.setDoOrNot(todoDTO.isDoOrNot());
+        // 종료자 등록
+        if(todoDTO.isDoOrNot()){
+            todoEntity.setCloser(userEntity);
+            // 종료한 작업 매핑
+            userEntity.getCloseList().add(todoEntity);
+        }else{
+            // 기존에 완료자 등록된 유저의 완료 목록에서 삭제
+            todoEntity.getCloser().getCloseList().remove(todoEntity);
+            // 완료자 제거
+            todoEntity.setCloser(null);
+        }
+
+        return 1;
+    }
+
+    public List<TodoDTO> getPersonalList(){
+        List<TodoDTO> todoList = new ArrayList<>();
+        UserEntity userEntity = userService.getUserInfo();
+        if(userEntity == null){ return null; } // 유저 정보 없음
+
+        PlannerEntity plannerEntity = null;
+
+        // 권한을 가진 플래너 순회, 개인 플래너 번호 찾기
+            // 이것도 쿼리문으로 처리하는 게 나을까?
+        for(AuthEntity authEntity : userEntity.getAuthEntityList()){
+            PlannerEntity p = authEntity.getPlannerEntity();
+            if(p.getType().getTName().equals("personal")){
+                plannerEntity = p;
+                log.info("getPersonalList - planner {}", p);
+                break;
+            }
+        }
+
+        System.out.println(userEntity);
+
+        if(plannerEntity!=null){
+            for(TodoEntity todoEntity : plannerEntity.getTodoEntityList()){
+                todoList.add(todoEntity.toDTO());
+            }
+        }
+
+        log.info("getPersonalList {}", todoList);
+
+        return todoList;
     }
 }
