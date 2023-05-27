@@ -32,10 +32,11 @@ public class TodoEntity extends BaseEntity {
     private LocalDateTime eTime;
 
     @ColumnDefault("false")
-    private boolean doOrNot;
+    private boolean isCompleted;
 
     @ManyToOne
     @JoinColumn(name = "open_uNo")
+    @Column( updatable = false)
     @ToString.Exclude
     private UserEntity opener;
 
@@ -46,13 +47,14 @@ public class TodoEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "pNo")
+    @Column( updatable = false)
     @ToString.Exclude
     private PlannerEntity plannerEntity;
 
     public TodoDTO toDTO(){
         return TodoDTO.builder().tNo(this.tNo).tText(this.tText)
                 .tTitle(this.tTitle).sTime(this.sTime).eTime(this.eTime)
-                .doOrNot(this.doOrNot).opener(this.opener.getUNo()).closer( (this.closer == null) ? 0 : this.closer.getUNo() )
+                .isCompleted(this.isCompleted).opener(this.opener.getUNo()).closer( (this.closer == null) ? 0 : this.closer.getUNo() )
                 .pno(this.plannerEntity.getPNo()).openerName(this.opener.getUId()).closerName(this.closer== null ? "" : this.closer.getUId()).build();
     }
 }

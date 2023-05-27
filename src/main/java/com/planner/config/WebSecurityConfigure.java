@@ -38,6 +38,7 @@ public class WebSecurityConfigure {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                 .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
             .and()
                 .csrf()
                 .disable();

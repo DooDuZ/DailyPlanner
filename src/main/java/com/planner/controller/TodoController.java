@@ -21,12 +21,17 @@ public class TodoController {
     }
 
     @PutMapping("/completed")
-    public int completed(@RequestBody TodoDTO todoDTO){
-        return todoService.completed(todoDTO);
+    public int completed(@RequestParam int tNo, boolean isCompleted){
+        return todoService.completed(tNo, isCompleted);
     }
 
     @GetMapping("/list")
     public List<TodoDTO> getPersonalList(){
         return todoService.getPersonalList();
+    }
+
+    @PutMapping("/duty")
+    public int updateTodo(@RequestBody TodoDTO todoDTO){
+        return todoService.updateTodo(todoDTO);
     }
 }

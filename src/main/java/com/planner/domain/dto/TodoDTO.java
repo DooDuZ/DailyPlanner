@@ -20,7 +20,7 @@ public class TodoDTO {
     private LocalDateTime sTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime eTime;
-    private boolean doOrNot;
+    private boolean isCompleted;
 
     // FK
     private Integer opener;
@@ -33,6 +33,6 @@ public class TodoDTO {
 
     public TodoEntity toEntity(){
         return TodoEntity.builder().tNo(this.tNo).tText(this.tText).tTitle(this.tTitle)
-                .sTime(this.sTime).eTime(this.eTime).doOrNot(this.doOrNot).build();
+                .sTime(this.sTime).eTime(this.eTime).isCompleted(this.isCompleted).build();
     }
 }

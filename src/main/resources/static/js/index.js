@@ -53,11 +53,11 @@ function getList(){
     })
 }
 
-function completeTodo( tno, doOrNot ){
+function completeTodo( tno, isCompleted ){
 
     if(!confirm("상태를 변경 하시겠습니까?")){ return; }
 
-    let data = { "tno" : tno, "doOrNot" : doOrNot}
+    let data = { "tno" : tno, "isCompleted" : isCompleted}
 
     console.log("==============data==============");
     console.log(data);
