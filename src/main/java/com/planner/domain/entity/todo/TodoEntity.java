@@ -36,7 +36,6 @@ public class TodoEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "open_uNo")
-    @Column( updatable = false)
     @ToString.Exclude
     private UserEntity opener;
 
@@ -47,7 +46,6 @@ public class TodoEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "pNo")
-    @Column( updatable = false)
     @ToString.Exclude
     private PlannerEntity plannerEntity;
 

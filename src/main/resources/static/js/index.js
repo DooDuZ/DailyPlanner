@@ -43,8 +43,8 @@ function getList(){
             let html = "";
 
             re.forEach( e => {
-                let complete = e.doOrNot ? "완료" : "-";
-                html += `<li> <span>${e.ttitle}</span> <span onclick="completeTodo(${e.tno}, ${!e.doOrNot})"> ${complete} </span> </li>`;
+                let complete = e.completed ? "완료" : "-";
+                html += `<li> <span>${e.ttitle}</span> <span onclick="completeTodo(${e.tno}, ${!e.completed})"> ${complete} </span> </li>`;
 
             } );
 
@@ -57,7 +57,7 @@ function completeTodo( tno, isCompleted ){
 
     if(!confirm("상태를 변경 하시겠습니까?")){ return; }
 
-    let data = { "tno" : tno, "isCompleted" : isCompleted}
+    let data = { "tno" : tno, "completed" : isCompleted}
 
     console.log("==============data==============");
     console.log(data);

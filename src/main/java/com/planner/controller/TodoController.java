@@ -21,8 +21,9 @@ public class TodoController {
     }
 
     @PutMapping("/completed")
-    public int completed(@RequestParam int tNo, boolean isCompleted){
-        return todoService.completed(tNo, isCompleted);
+    public int completed(@RequestBody TodoDTO todoDTO){
+        System.out.println("요기"+todoDTO);
+        return todoService.completed(todoDTO);
     }
 
     @GetMapping("/list")
