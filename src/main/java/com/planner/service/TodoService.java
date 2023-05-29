@@ -7,7 +7,6 @@ import com.planner.domain.entity.planner.PlannerRepository;
 import com.planner.domain.entity.todo.TodoEntity;
 import com.planner.domain.entity.todo.TodoRepository;
 import com.planner.domain.entity.user.UserEntity;
-import com.planner.domain.entity.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,22 +19,24 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class TodoService {
-
     @Autowired
     TodoRepository todoRepository;
     @Autowired
     PlannerRepository plannerRepository;
     @Autowired
     UserService userService;
-    @Autowired
-    UserRepository userRepository;
 
     @Transactional
     public int createTodo(TodoDTO todoDTO){
+        if(todoDTO.getTTitle() == null || todoDTO.getTTitle().equals("")){
+            log.info("createTodo {}", todoDTO );
+            return -1; // 제목 없음
+        }
+
         log.info("createTodo param {}", todoDTO);
         UserEntity userEntity = userService.getUserInfo();
 
-        if(userEntity == null){ return 0; }// 로그인 정보 없음
+        if(userEntity == null){ return 0; } // 로그인 정보 없음
 
         TodoEntity todoEntity = todoDTO.toEntity();
         todoEntity.setOpener(userEntity);
@@ -49,9 +50,11 @@ public class TodoService {
 
         todoEntity.setPlannerEntity(plannerEntity);
 
-        todoRepository.save(todoEntity);
+        if(todoRepository.save(todoEntity).getTNo() != 0 ){ // 저장 성공
+            return 1;
+        }
 
-        return 1;
+        return 5; // 데이터 저장 실패
     }
 
     // 접근 권한 체크
@@ -121,8 +124,6 @@ public class TodoService {
             }
         }
 
-        System.out.println(userEntity);
-
         if(plannerEntity!=null){
             for(TodoEntity todoEntity : plannerEntity.getTodoEntityList()){
                 todoList.add(todoEntity.toDTO());
@@ -143,36 +144,25 @@ public class TodoService {
 
         UserEntity userEntity = userService.getUserInfo();
         if(userEntity == null){ return 0; } // 유저 정보 없음
-        Optional<PlannerEntity> plannerOptional = plannerRepository.findById(todoDTO.getPno());
-        if(!plannerOptional.isPresent()){ return 2; } // 플래너 정보 없음
-        PlannerEntity plannerEntity = plannerOptional.get();
-        if(!checkAuth(userEntity, plannerEntity)){ return 3; } // 권한 없음
-
         Optional<TodoEntity> todoOptional = todoRepository.findById( todoDTO.getTNo() );
-        if(!todoOptional.isPresent()){ return 4; } // 존재하지 않는 기록 ex)작업 중 누군가 삭제한 경우
+        if(!todoOptional.isPresent()){ return 2; } // 존재하지 않는 기록 ex)작업 중 누군가 삭제한 경우
+        Optional<PlannerEntity> plannerOptional = plannerRepository.findById(todoDTO.getPno());
+        if(!plannerOptional.isPresent()){ return 3; } // 플래너 정보 없음
+        PlannerEntity plannerEntity = plannerOptional.get();
+        if(!checkAuth(userEntity, plannerEntity)){ return 4; } // 권한 없음
 
         TodoEntity todoEntity = todoOptional.get();
-/*
-        complete 매서드 통해서 처리되는 내용이다.
-        // 작업 완료 체크
-        if(todoEntity.getCloser()!=null){
-            Optional<UserEntity> closerOptional = userRepository.findById(todoDTO.getCloser());
-            if(!closerOptional.isPresent()){ return 5; } // 잘못된 완료 작업자 정보
-            // 완료된 작업이면 기존 작업자의 종료 기록에서 삭제
-            todoEntity.getCloser().getCloseList().remove(todoEntity);
-            todoEntity.setCloser(closerOptional.get()); // 완료자 변경
-        }
-*/
+
         // 내용 변경 처리
         todoEntity.setTTitle(todoDTO.getTTitle());      // 제목
         todoEntity.setTText(todoDTO.getTText());        // 내용
         todoEntity.setSTime(todoDTO.getSTime());        // 시작 시간
         todoEntity.setETime(todoDTO.getETime());        // 종료 시간
-        // todoEntity.setCompleted(todoDTO.isCompleted()); // 완료 여부
 
-        completed(todoDTO);
+        // 완료 처리
+        if(completed(todoDTO)==1){ return 1; }
 
-        return 1;
+        return 5; // 완료 여부 변경 실패
     }
 
     public boolean checkData(TodoDTO todoDTO){
@@ -180,5 +170,35 @@ public class TodoService {
             return true;
         }
         return false;
+    }
+
+    public int deleteTodo(TodoDTO todoDTO){
+        log.info("deleteTodo", todoDTO);
+        if(todoDTO.getTNo()==0){ return -1; } // 삭제할 게시물 번호 없음
+        UserEntity userEntity = userService.getUserInfo();
+        if(userEntity == null){ return 0; } // 유저 정보 없음
+
+        Optional<TodoEntity> todoOptional = todoRepository.findById(todoDTO.getTNo());
+        if(!todoOptional.isPresent()){ return 2; }  // 존재하지 않는 게시물
+
+        TodoEntity todoEntity = todoOptional.get();
+        PlannerEntity plannerEntity;
+
+        // 게시물 번호만 받기 때문에 planner 정보를 확인하는데 안전하지 않음
+            // ex) 삭제 작업 진행 중 누군가 해당 플래너 자체를 삭제하는 경우
+            // 영속성 전이를 통해 게시물 존재 여부에서 필터링 된다면 다행이지만 혹시나 그렇지 않은 경우를 위해 try/catch
+        try{
+            plannerEntity = todoEntity.getPlannerEntity();
+        }catch (Exception e){
+            log.error("deleteTodo {}", e);
+            return 3;   // 플래너 정보 없음
+        }
+
+        if(!checkAuth(userEntity, plannerEntity)){ return 4; } // 권한 없음
+
+        // 삭제 처리
+        todoRepository.delete(todoEntity);
+
+        return 1;
     }
 }

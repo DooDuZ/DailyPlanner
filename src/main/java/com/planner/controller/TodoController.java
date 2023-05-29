@@ -3,10 +3,7 @@ package com.planner.controller;
 import com.planner.domain.dto.TodoDTO;
 import com.planner.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -16,7 +13,7 @@ public class TodoController {
     TodoService todoService;
 
     @PostMapping("/duty")
-    public int createTodo(TodoDTO todoDTO){
+    public int createTodo(@RequestBody TodoDTO todoDTO){
         return todoService.createTodo(todoDTO);
     }
 
@@ -35,4 +32,10 @@ public class TodoController {
     public int updateTodo(@RequestBody TodoDTO todoDTO){
         return todoService.updateTodo(todoDTO);
     }
+
+    @DeleteMapping("/duty")
+    public int deleteTodo(@RequestBody TodoDTO todoDTO){
+        return todoService.deleteTodo(todoDTO);
+    }
+
 }

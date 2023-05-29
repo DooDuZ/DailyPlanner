@@ -1,4 +1,6 @@
 
+
+// form -> JSON으로 수정 필요 !!!
 function regist(){
     let form = document.querySelector('.todoForm');
     let formData = new FormData(form);
