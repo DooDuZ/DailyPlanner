@@ -5,10 +5,8 @@ import com.planner.domain.entity.user.UserEntity;
 import com.planner.domain.entity.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -85,18 +82,5 @@ public class UserService implements UserDetailsService {
             return false;
         }
         return true;
-    }
-
-    public UserEntity getUserInfo(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        if(principal.equals("anonymousUser")){
-            return null;
-        }
-        UserDTO userDTO = (UserDTO) principal;
-        Optional<UserEntity> userOptional = userRepository.findByuId(userDTO.getUId());
-        if(!userOptional.isPresent()){ return null; }
-        return userOptional.get();
     }
 }

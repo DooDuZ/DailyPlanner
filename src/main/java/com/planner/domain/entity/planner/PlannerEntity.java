@@ -1,6 +1,5 @@
 package com.planner.domain.entity.planner;
 
-import com.planner.domain.dto.AuthDTO;
 import com.planner.domain.dto.PlannerDTO;
 import com.planner.domain.entity.BaseEntity;
 import com.planner.domain.entity.auth.AuthEntity;
@@ -40,10 +39,11 @@ public class PlannerEntity extends BaseEntity {
     List<AuthEntity> authEntityList = new ArrayList<>();
 
     public PlannerDTO toDTO(){
-        List<AuthDTO> authDTOList = new ArrayList<>();
+        List<String> authUserList = new ArrayList<>();
         for(AuthEntity entity : authEntityList){
-            authDTOList.add(entity.toDTO());
+            UserEntity userEntity = entity.getUserEntity();
+            authUserList.add(userEntity.getUId());
         }
-        return PlannerDTO.builder().pNo(this.pNo).authEntityList(authDTOList).build();
+        return PlannerDTO.builder().pNo(this.pNo).authUserList(authUserList).build();
     }
 }

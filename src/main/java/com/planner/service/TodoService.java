@@ -24,7 +24,7 @@ public class TodoService {
     @Autowired
     PlannerRepository plannerRepository;
     @Autowired
-    UserService userService;
+    IsLoginService isLoginService;
 
     @Transactional
     public int createTodo(TodoDTO todoDTO){
@@ -34,7 +34,7 @@ public class TodoService {
         }
 
         log.info("createTodo param {}", todoDTO);
-        UserEntity userEntity = userService.getUserInfo();
+        UserEntity userEntity = isLoginService.getUserInfo();
 
         if(userEntity == null){ return 0; } // 로그인 정보 없음
 
@@ -73,7 +73,7 @@ public class TodoService {
     @Transactional
     public int completed(TodoDTO todoDTO){
         log.info("Completed", todoDTO);
-        UserEntity userEntity = userService.getUserInfo();
+        UserEntity userEntity = isLoginService.getUserInfo();
         if(userEntity == null){ return 0; } // 로그인 정보 없음
 
         Optional<TodoEntity> todoOptional = todoRepository.findById(todoDTO.getTNo());
@@ -108,7 +108,7 @@ public class TodoService {
 
     public List<TodoDTO> getPersonalList(){
         List<TodoDTO> todoList = new ArrayList<>();
-        UserEntity userEntity = userService.getUserInfo();
+        UserEntity userEntity = isLoginService.getUserInfo();
         if(userEntity == null){ return null; } // 유저 정보 없음
 
         PlannerEntity plannerEntity = null;
@@ -142,7 +142,7 @@ public class TodoService {
 
         if(!checkData(todoDTO)){ return -1; }
 
-        UserEntity userEntity = userService.getUserInfo();
+        UserEntity userEntity = isLoginService.getUserInfo();
         if(userEntity == null){ return 0; } // 유저 정보 없음
         Optional<TodoEntity> todoOptional = todoRepository.findById( todoDTO.getTNo() );
         if(!todoOptional.isPresent()){ return 2; } // 존재하지 않는 기록 ex)작업 중 누군가 삭제한 경우
@@ -175,7 +175,7 @@ public class TodoService {
     public int deleteTodo(TodoDTO todoDTO){
         log.info("deleteTodo", todoDTO);
         if(todoDTO.getTNo()==0){ return -1; } // 삭제할 게시물 번호 없음
-        UserEntity userEntity = userService.getUserInfo();
+        UserEntity userEntity = isLoginService.getUserInfo();
         if(userEntity == null){ return 0; } // 유저 정보 없음
 
         Optional<TodoEntity> todoOptional = todoRepository.findById(todoDTO.getTNo());
