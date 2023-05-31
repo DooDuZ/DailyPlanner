@@ -19,7 +19,7 @@ public class TodoController {
 
     @PutMapping("/completed")
     public int completed(@RequestBody TodoDTO todoDTO){
-        System.out.println("요기"+todoDTO);
+        System.out.println(todoDTO);
         return todoService.completed(todoDTO);
     }
 

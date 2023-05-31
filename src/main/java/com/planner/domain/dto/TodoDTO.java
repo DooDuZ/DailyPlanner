@@ -23,9 +23,9 @@ public class TodoDTO {
     private boolean isCompleted;
 
     // FK
-    private Integer opener;
-    private Integer closer;
-    private Integer pno;
+    private int opener;
+    private int closer;
+    private int pno;
 
     // 반환용 필드
     private String openerName;

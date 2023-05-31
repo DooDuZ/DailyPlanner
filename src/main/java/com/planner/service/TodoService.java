@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -105,11 +106,12 @@ public class TodoService {
 
         // 작업 완료 처리한 유저 등록
         if(todoDTO.isCompleted()){
-            if(todoEntity.getCloser() == null){
-                todoEntity.setCloser(userEntity);
-                // 종료한 작업 매핑
-                userEntity.getCloseList().add(todoEntity);
+            todoEntity.setCloser(userEntity);
+            if (todoEntity.getETime()==null){
+                todoEntity.setETime(LocalDateTime.now());
             }
+            // 종료한 작업 매핑
+            userEntity.getCloseList().add(todoEntity);
         }
 
         return 1;
@@ -128,7 +130,7 @@ public class TodoService {
             PlannerEntity p = authEntity.getPlannerEntity();
             if(p.getPNo() == pno){
                 plannerEntity = p;
-                log.info("getPersonalList - planner {}", p);
+                log.info("getList - planner {}", p);
                 break;
             }
         }
@@ -176,6 +178,7 @@ public class TodoService {
         }
         todoEntity.setETime(todoDTO.getETime());        // 종료 시간
 
+        /*
         if(todoDTO.getETime()==null){ // 종료 시간 미입력 시
             todoEntity.setCloser(null); // 작업 완료자 삭제
         }else{
@@ -190,6 +193,7 @@ public class TodoService {
                 }
             }
         }
+        */
 
         // 완료 처리
         if(completed(todoDTO)==1){ return 1; }

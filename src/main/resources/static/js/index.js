@@ -3,19 +3,22 @@
 // form -> JSON으로 수정 필요 !!!
 function regist(){
     let form = document.querySelector('.todoForm');
-    let formData = new FormData(form);
 
-    formData.set("pno", 1);
+    let data = {
+        "title" : form[0].value,
+        "text" : form[1].value,
+        "stime" : form[2].value,
+        "etime" : form[3].value,
+        "pno" : 1
+    }
 
-    console.log(document.querySelector('.timeData'));
-    console.log(document.querySelector('.timeData').value);
+    console.log(data);
 
     $.ajax({
         url : "/todo/duty",
         type : 'POST',
-        data : formData,
-        contentType : false,
-        processData : false,
+        data : JSON.stringify(data),
+        contentType : "application/json",
         error : (err)=>{
             console.log(err);
         },
@@ -30,7 +33,7 @@ function getList(){
     const todoList = document.querySelector('.todoList');
 
     $.ajax({
-        url : "/todo/list",
+        url : "/todo/list?pno=1",
         type : 'GET',
         error : (err)=>{
             console.log("에러 발생!");
@@ -47,8 +50,7 @@ function getList(){
             re.forEach( e => {
                 let complete = e.completed ? "완료" : "-";
                 html += `<li> <span>${e.title}</span> <span onclick="completeTodo(${e.tno}, ${!e.completed})"> ${complete} </span> </li>`;
-
-            } );
+            });
 
             todoList.innerHTML = html;
         }
