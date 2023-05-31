@@ -21,6 +21,8 @@ public class PlannerEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pNo;
 
+    private String pName;
+
     @ManyToOne
     @JoinColumn(name = "uNo")
     @ToString.Exclude
@@ -44,6 +46,6 @@ public class PlannerEntity extends BaseEntity {
             UserEntity userEntity = entity.getUserEntity();
             authUserList.add(userEntity.getUId());
         }
-        return PlannerDTO.builder().pNo(this.pNo).authUserList(authUserList).build();
+        return PlannerDTO.builder().pNo(this.pNo).authUserList(authUserList).pName(this.pName).build();
     }
 }

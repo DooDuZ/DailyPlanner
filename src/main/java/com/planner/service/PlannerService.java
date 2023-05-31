@@ -27,13 +27,13 @@ public class PlannerService {
 
     @Transactional
     public boolean userPlannerInit(UserEntity userEntity){
-
         Optional<TypeEntity> optional = typeRepository.findBytName("personal");
-
         // 개인 플래너 생성 실패
         if(!optional.isPresent()){ return false; }
 
-        PlannerEntity plannerEntity = PlannerEntity.builder().pOwner(userEntity).type(optional.get()).build();
+        String plannerName = userEntity.getUName() + "의 플래너";
+
+        PlannerEntity plannerEntity = PlannerEntity.builder().pOwner(userEntity).type(optional.get()).pName(plannerName).build();
         plannerRepository.save(plannerEntity);
 
         // 권한 생성 및 등록

@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TodoDTO {
     private int tNo;
-    private String tTitle;
-    private String tText;
+    private String title;
+    private String text;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime sTime;
@@ -31,8 +31,11 @@ public class TodoDTO {
     private String openerName;
     private String closerName;
 
+    // status 반환 필드
+    private int status;
+
     public TodoEntity toEntity(){
-        return TodoEntity.builder().tNo(this.tNo).tText(this.tText).tTitle(this.tTitle)
+        return TodoEntity.builder().tNo(this.tNo).text(this.text).title(this.title)
                 .sTime(this.sTime).eTime(this.eTime).isCompleted(this.isCompleted).build();
     }
 }

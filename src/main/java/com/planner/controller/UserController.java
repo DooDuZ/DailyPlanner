@@ -1,12 +1,10 @@
 package com.planner.controller;
 
 import com.planner.domain.dto.UserDTO;
+import com.planner.domain.dto.UserInfoDTO;
 import com.planner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -16,5 +14,16 @@ public class UserController{
     @PostMapping("/sign-up")
     public int signUp(@RequestBody UserDTO userDTO){
         return userService.signUp(userDTO);
+    }
+
+    @GetMapping("/info")
+    public UserInfoDTO getInfo(@RequestParam int uno){
+        System.out.println("test");
+        return userService.getInfo(uno);
+    }
+
+    @PostMapping("/check-user")
+    public boolean checkUser(@RequestParam String upassword){
+        return userService.checkUser(upassword);
     }
 }

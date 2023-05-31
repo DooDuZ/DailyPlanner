@@ -46,7 +46,7 @@ function getList(){
 
             re.forEach( e => {
                 let complete = e.completed ? "완료" : "-";
-                html += `<li> <span>${e.ttitle}</span> <span onclick="completeTodo(${e.tno}, ${!e.completed})"> ${complete} </span> </li>`;
+                html += `<li> <span>${e.title}</span> <span onclick="completeTodo(${e.tno}, ${!e.completed})"> ${complete} </span> </li>`;
 
             } );
 

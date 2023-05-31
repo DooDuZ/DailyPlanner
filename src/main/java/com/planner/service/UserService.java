@@ -1,6 +1,7 @@
 package com.planner.service;
 
 import com.planner.domain.dto.UserDTO;
+import com.planner.domain.dto.UserInfoDTO;
 import com.planner.domain.entity.user.UserEntity;
 import com.planner.domain.entity.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class UserService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
     @Autowired
     PlannerService plannerService;
+    @Autowired
+    IsLoginService isLoginService;
 
     @Transactional
     @Override
@@ -72,8 +75,10 @@ public class UserService implements UserDetailsService {
             return 4;
         }
 
-        userRepository.save(userEntity);
-        return 1;
+        if(userRepository.save(userEntity).getUNo()!=0){
+            return 1;
+        };
+        return 5; // 내부 오류
     }
 
     // 문자열 데이터 검증 -> 추후 유효성검사 추가
@@ -82,5 +87,20 @@ public class UserService implements UserDetailsService {
             return false;
         }
         return true;
+    }
+
+    public UserInfoDTO getInfo(int uno){
+        UserEntity userEntity = isLoginService.getUserInfo();
+        if(userEntity == null ){ return null;}  // 본인 정보 아님
+        return userEntity.toUserInfoDTO();
+    }
+
+    public boolean checkUser(String upassword){
+        UserEntity userEntity = isLoginService.getUserInfo();
+        if(userEntity == null){ return false; }
+        if(passwordEncoder.matches(upassword, userEntity.getUPassword())){
+            return true;
+        }
+        return false;
     }
 }

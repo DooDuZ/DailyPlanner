@@ -7,6 +7,7 @@ import com.planner.domain.entity.planner.PlannerRepository;
 import com.planner.domain.entity.todo.TodoEntity;
 import com.planner.domain.entity.todo.TodoRepository;
 import com.planner.domain.entity.user.UserEntity;
+import com.planner.domain.entity.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,14 @@ public class TodoService {
     PlannerRepository plannerRepository;
     @Autowired
     IsLoginService isLoginService;
+    @Autowired
+    UserRepository userRepository;
 
     @Transactional
     public int createTodo(TodoDTO todoDTO){
-        if(todoDTO.getTTitle() == null || todoDTO.getTTitle().equals("")){
+        if(todoDTO.getTitle() == null || todoDTO.getTitle().equals("") || todoDTO.getPno() == 0){
             log.info("createTodo {}", todoDTO );
-            return -1; // 제목 없음
+            return -1; // 입력 정보 오류
         }
 
         log.info("createTodo param {}", todoDTO);
@@ -49,6 +52,12 @@ public class TodoService {
         if(!checkAuth(userEntity, plannerEntity)){ return 3; } // 권한 없음
 
         todoEntity.setPlannerEntity(plannerEntity);
+
+        if( todoEntity.getETime()!=null ){
+            if(todoEntity.getCloser() == null){
+                todoEntity.setCloser(userEntity);
+            }
+        }
 
         if(todoRepository.save(todoEntity).getTNo() != 0 ){ // 저장 성공
             return 1;
@@ -106,7 +115,7 @@ public class TodoService {
         return 1;
     }
 
-    public List<TodoDTO> getPersonalList(){
+    public List<TodoDTO> getList(int pno){
         List<TodoDTO> todoList = new ArrayList<>();
         UserEntity userEntity = isLoginService.getUserInfo();
         if(userEntity == null){ return null; } // 유저 정보 없음
@@ -117,7 +126,7 @@ public class TodoService {
             // 이것도 쿼리문으로 처리하는 게 나을까?
         for(AuthEntity authEntity : userEntity.getAuthEntityList()){
             PlannerEntity p = authEntity.getPlannerEntity();
-            if(p.getType().getTName().equals("personal")){
+            if(p.getPNo() == pno){
                 plannerEntity = p;
                 log.info("getPersonalList - planner {}", p);
                 break;
@@ -135,7 +144,6 @@ public class TodoService {
         return todoList;
     }
 
-    // 테스트 필요함!!
     @Transactional
     public int updateTodo(TodoDTO todoDTO){
         log.info("updateTodo", todoDTO);
@@ -146,18 +154,42 @@ public class TodoService {
         if(userEntity == null){ return 0; } // 유저 정보 없음
         Optional<TodoEntity> todoOptional = todoRepository.findById( todoDTO.getTNo() );
         if(!todoOptional.isPresent()){ return 2; } // 존재하지 않는 기록 ex)작업 중 누군가 삭제한 경우
-        Optional<PlannerEntity> plannerOptional = plannerRepository.findById(todoDTO.getPno());
-        if(!plannerOptional.isPresent()){ return 3; } // 플래너 정보 없음
-        PlannerEntity plannerEntity = plannerOptional.get();
-        if(!checkAuth(userEntity, plannerEntity)){ return 4; } // 권한 없음
 
         TodoEntity todoEntity = todoOptional.get();
+        PlannerEntity plannerEntity;
+        try{
+            plannerEntity = todoEntity.getPlannerEntity();
+        }catch (Exception e){
+            log.error("UPDATE ERROR!! {}", e);
+            return 4;
+        }
+
+        if(!checkAuth(userEntity, plannerEntity)){ return 4; } // 권한 없음
 
         // 내용 변경 처리
-        todoEntity.setTTitle(todoDTO.getTTitle());      // 제목
-        todoEntity.setTText(todoDTO.getTText());        // 내용
-        todoEntity.setSTime(todoDTO.getSTime());        // 시작 시간
+        if(todoDTO.getTitle() != null ){
+            todoEntity.setTitle(todoDTO.getTitle());  // 제목
+        }
+        todoEntity.setText(todoDTO.getText());        // 내용
+        if(todoDTO.getSTime() != null){
+            todoEntity.setSTime(todoDTO.getSTime());    // 시작 시간
+        }
         todoEntity.setETime(todoDTO.getETime());        // 종료 시간
+
+        if(todoDTO.getETime()==null){ // 종료 시간 미입력 시
+            todoEntity.setCloser(null); // 작업 완료자 삭제
+        }else{
+            if(todoDTO.getCloser() == 0){   // 종료시간 존재 + 작업 완료자 없는 경우
+                todoEntity.setCloser(userEntity);   // 수정한 유저를 완료자로 등록
+            }else{
+                Optional<UserEntity> closerOptional = userRepository.findById(todoDTO.getCloser());
+                if(closerOptional.isPresent()){     // 종료 입력된 유저가 존재하면 세팅
+                    todoEntity.setCloser(closerOptional.get());
+                }else{
+                    todoEntity.setCloser(userEntity);   // 없는 경우 수정한 유저로 등록
+                }
+            }
+        }
 
         // 완료 처리
         if(completed(todoDTO)==1){ return 1; }
@@ -166,7 +198,7 @@ public class TodoService {
     }
 
     public boolean checkData(TodoDTO todoDTO){
-        if(todoDTO.getTNo() != 0 || todoDTO.getPno() != 0 || todoDTO.getTTitle() != null ){
+        if(todoDTO.getTNo() != 0 || todoDTO.getTitle() != null ){
             return true;
         }
         return false;
@@ -200,5 +232,25 @@ public class TodoService {
         todoRepository.delete(todoEntity);
 
         return 1;
+    }
+
+    public TodoDTO getTodo(int tno){
+        UserEntity userEntity = isLoginService.getUserInfo();
+        if(userEntity == null){
+            return TodoDTO.builder().status(0).build();
+        } // 유저 정보 없음
+        Optional<TodoEntity> todoOptional = todoRepository.findById(tno);
+        if(!todoOptional.isPresent()){
+            return TodoDTO.builder().status(2).build();
+        }
+        TodoEntity todoEntity = todoOptional.get();
+
+        if(!checkAuth(userEntity, todoEntity.getPlannerEntity())){
+            return TodoDTO.builder().status(3).build(); // 권한 없는 게시물
+        }
+
+        TodoDTO todoDTO = todoEntity.toDTO(); // status default 1
+
+        return todoDTO;
     }
 }

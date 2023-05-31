@@ -3,6 +3,7 @@ package com.planner.domain.entity.user;
 import com.planner.domain.dto.AuthDTO;
 import com.planner.domain.dto.TodoDTO;
 import com.planner.domain.dto.UserDTO;
+import com.planner.domain.dto.UserInfoDTO;
 import com.planner.domain.entity.BaseEntity;
 import com.planner.domain.entity.auth.AuthEntity;
 import com.planner.domain.entity.todo.TodoEntity;
@@ -54,5 +55,9 @@ public class UserEntity extends BaseEntity {
     public UserDTO toDTO(){
         return UserDTO.builder().uId(this.uId).uName(this.uName).uEmail(this.uEmail).uRole(this.uRole).uPassword(this.uPassword)
                 .build();
+    }
+
+    public UserInfoDTO toUserInfoDTO(){
+        return UserInfoDTO.builder().uNo(uNo).uId(this.uId).uName(this.uName).uEmail(this.uEmail).uRole(this.uRole).build();
     }
 }

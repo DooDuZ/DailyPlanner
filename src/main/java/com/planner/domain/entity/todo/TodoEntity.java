@@ -23,10 +23,10 @@ public class TodoEntity extends BaseEntity {
     private int tNo;
 
     @Column(nullable = false)
-    private String tTitle;
+    private String title;
 
     @Column(columnDefinition = "LONGTEXT")
-    private String tText;
+    private String text;
 
     private LocalDateTime sTime;
     private LocalDateTime eTime;
@@ -50,9 +50,10 @@ public class TodoEntity extends BaseEntity {
     private PlannerEntity plannerEntity;
 
     public TodoDTO toDTO(){
-        return TodoDTO.builder().tNo(this.tNo).tText(this.tText)
-                .tTitle(this.tTitle).sTime(this.sTime).eTime(this.eTime)
+        return TodoDTO.builder().tNo(this.tNo).text(this.text)
+                .title(this.title).sTime(this.sTime).eTime(this.eTime)
                 .isCompleted(this.isCompleted).opener(this.opener.getUNo()).closer( (this.closer == null) ? 0 : this.closer.getUNo() )
-                .pno(this.plannerEntity.getPNo()).openerName(this.opener.getUId()).closerName(this.closer== null ? "" : this.closer.getUId()).build();
+                .pno(this.plannerEntity.getPNo()).openerName(this.opener.getUId()).status(1)
+                .closerName(this.closer== null ? "" : this.closer.getUId()).build();
     }
 }

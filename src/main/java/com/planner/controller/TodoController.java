@@ -24,8 +24,12 @@ public class TodoController {
     }
 
     @GetMapping("/list")
-    public List<TodoDTO> getPersonalList(){
-        return todoService.getPersonalList();
+    public List<TodoDTO> getList(@RequestParam int pno){
+        return todoService.getList(pno);
+    }
+    @GetMapping("/duty")
+    public TodoDTO getTodo(@RequestParam int tno){
+        return todoService.getTodo(tno);
     }
 
     @PutMapping("/duty")

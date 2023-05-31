@@ -3,7 +3,6 @@ package com.planner.domain.dto;
 
 import com.planner.domain.entity.planner.PlannerEntity;
 import lombok.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,9 +14,10 @@ import java.util.List;
 public class PlannerDTO {
     private int pNo;
     private int pType;
+    private String pName;
     // FK
     List<String> authUserList;
     public PlannerEntity toEntity(){
-        return PlannerEntity.builder().pNo(this.pNo).build();
+        return PlannerEntity.builder().pNo(this.pNo).pName(this.pName).build();
     }
 }
