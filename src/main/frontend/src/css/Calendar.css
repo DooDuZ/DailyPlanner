@@ -1,0 +1,22 @@
+
+.calendar_header{
+
+}
+
+.header_el{
+    padding : 10px;
+    width : 100px;
+    height : 50px;
+}
+
+.calendar_row {
+    width : 1000px;
+    display : flex;
+}
+
+.dayCell{
+    background-color : #ffebe8;
+    padding : 10px;
+    width : 100px;
+    height : 50px;
+}
