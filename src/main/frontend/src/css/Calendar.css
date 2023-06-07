@@ -1,22 +1,79 @@
 
+h3{
+    font-size : 30px;
+    margin : 20px 0 20px 0;
+}
+
+.calendar_wrap{
+    width : 100%;
+    margin : 0 auto;
+    display : flex;
+    flex-direction : column;
+    justify-content : center;
+    align-items : center;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.controller_wrap{
+    padding : 30px;
+    font-family: 'KCC-Ganpan';
+}
+
+.calender_controller{
+    display : flex;
+}
+
+.controller_display{
+    display : flex;
+    justify-content : center;
+    align-items : center;
+}
+
+
+.controllerBtn{
+    background : none;
+    border : none;
+}
+
+.controller_display{
+    width : 200px;
+    height : 80px;
+}
+
+.controllerBtn img{
+    width : 30px;
+    height : 30px;
+}
+
 .calendar_header{
 
 }
 
 .header_el{
     padding : 10px;
-    width : 100px;
+    width : 175px;
     height : 50px;
+
 }
 
 .calendar_row {
-    width : 1000px;
     display : flex;
 }
 
 .dayCell{
+    text-align : right;
     background-color : #ffebe8;
     padding : 10px;
-    width : 100px;
-    height : 50px;
+    width : 175px;
+    height : 125px;
+}
+
+.dayCell:nth-child(7n+1){
+    color : red;
+    font-weight : bold;
+}
+
+.dayCell:nth-child(7n+7){
+    color : blue;
+    font-weight : bold;
 }

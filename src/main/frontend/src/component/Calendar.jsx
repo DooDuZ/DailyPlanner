@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../css/Calendar.css';
 
 function Calendar(props){
-
+    const year = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const week = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
 
     let today = new Date();
@@ -61,31 +61,50 @@ function Calendar(props){
     );
 
     return (
-        <div>
-            <div> {selectedYear} 년 {selectedMonth+1} 월 </div>
-            <button onClick={
-                ()=>{
-                    let m = selectedMonth+1;
-                    if(m <= 11){
-                        setMonth( selectedYear, m );
-                    }else {
-                        setMonth( selectedYear+1, 0 );
-                    }
-                }
-            }> up </button>
-            <button onClick={
-                ()=>{
-                    let m = selectedMonth-1;
-                    if(m >= 0){
-                        setMonth( selectedYear, m );
-                    }else {
-                        setMonth( selectedYear-1, 11 );
-                    }
-                }
-            }> down </button>
-
+        <div className="calendar_wrap">
+            <Calendar_Controller selectedYear={selectedYear} selectedMonth={selectedMonth} setMonth={setMonth} year={year} />
             <Calendar_Header week={week} />
             <Calendar_Body monthData={monthData}/>
+        </div>
+    )
+}
+
+function Calendar_Controller(props){
+    return (
+        <div className="controller_wrap">
+            <div className="calendar_year">
+                <h3> {props.selectedYear} </h3>
+            </div>
+
+            <div className="calender_controller">
+                <button onClick={
+                    ()=>{
+                        let m = props.selectedMonth-1;
+                        if(m >= 0){
+                            props.setMonth( props.selectedYear, m );
+                        }else {
+                            props.setMonth( props.selectedYear-1, 11 );
+                        }
+                    }
+                } className="controllerBtn">
+                    <img src={process.env.PUBLIC_URL +"/img/leftArrow.png"} />
+                </button>
+                <div className="controller_display">
+                    <h3> {props.year[props.selectedMonth]}</h3>
+                </div>
+                <button onClick={
+                    ()=>{
+                        let m = props.selectedMonth+1;
+                        if(m <= 11){
+                            props.setMonth( props.selectedYear, m );
+                        }else {
+                            props.setMonth( props.selectedYear+1, 0 );
+                        }
+                    }
+                } className="controllerBtn">
+                    <img src={process.env.PUBLIC_URL +"/img/rightArrow.png"} />
+                </button>
+            </div>
         </div>
     )
 }
