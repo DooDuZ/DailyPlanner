@@ -42,4 +42,10 @@ public class TodoController {
         return todoService.deleteTodo(todoDTO);
     }
 
+    @GetMapping("/month-list")
+    public List<TodoDTO> getMonthList(@RequestParam int pno, @RequestParam int year, @RequestParam int month){
+        System.out.println(pno + ", " + year + " , " + month);
+        return todoService.getMonthList(pno, year, month);
+    }
+
 }

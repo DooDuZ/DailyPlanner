@@ -11,3 +11,8 @@
     font-weight: normal;
     font-style: normal;
 }
+
+.footer{
+    height : 200px;
+    background-color : #1f4e62;
+}

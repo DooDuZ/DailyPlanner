@@ -1,7 +1,6 @@
 
 h3{
-    font-size : 30px;
-    margin : 20px 0 20px 0;
+    margin : 0;
 }
 
 .calendar_wrap{
@@ -21,14 +20,20 @@ h3{
 
 .calender_controller{
     display : flex;
-}
-
-.controller_display{
-    display : flex;
-    justify-content : center;
+    justify-content : space-between;
     align-items : center;
+    width : 400px;
 }
 
+.display_year{
+    font-size : 25px;
+    margin : 10px 0 10px 0;
+}
+
+.display_month{
+    font-size : 35px;
+    margin : 0;
+}
 
 .controllerBtn{
     background : none;
@@ -45,15 +50,26 @@ h3{
     height : 30px;
 }
 
-.calendar_header{
 
+.calendar_header{
+    width : 1407px;
+    background-color: #fff1ef;
+    border-radius: 10px;
+    vertical-align: middle;
+    margin : 10px 0 10px 0;
+    font-weight : bold;
+    justify-content : space-evenly;
 }
 
 .header_el{
     padding : 10px;
     width : 175px;
-    height : 50px;
+}
 
+.calendar_body {
+    background-color : #ffebe8;
+    border-radius : 10px;
+    margin-bottom : 40px;
 }
 
 .calendar_row {
@@ -61,11 +77,13 @@ h3{
 }
 
 .dayCell{
-    text-align : right;
-    background-color : #ffebe8;
-    padding : 10px;
-    width : 175px;
-    height : 125px;
+        text-align: right;
+        margin: 5px;
+        padding: 8px;
+        width: 175px;
+        height: 125px;
+        background-color: rgba(255,255,255, 0.3);
+        border-radius: 10px;
 }
 
 .dayCell:nth-child(7n+1){
@@ -76,4 +94,36 @@ h3{
 .dayCell:nth-child(7n+7){
     color : blue;
     font-weight : bold;
+}
+
+.dayCell p{
+    margin : 0;
+    cursor : cursor;
+}
+
+.todayCell p{
+    font-weight : bold;
+    border-radius: 50%;
+    position : relative;
+    z-index : 10;
+}
+
+.todayCell p:after{
+    content : '';
+    width : 25px;
+    height : 25px;
+    display : inline-block;
+    border-radius: 50%;
+    position : absolute;
+    right : -7px;
+    top : 0px;
+    z-index : -1;
+    background-color : #ffffff;
+}
+
+.list_preview{
+    text-align: left;
+    color : #eeeeee;
+    font-size : 10px;
+    margin : 5px 0 5px 0;
 }

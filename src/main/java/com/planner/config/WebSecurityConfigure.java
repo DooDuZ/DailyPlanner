@@ -29,6 +29,7 @@ public class WebSecurityConfigure {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, UserService userService) throws Exception {
         httpSecurity
             .formLogin()
+                .loginPage("/")
                 .loginProcessingUrl("/user/login")
                 .defaultSuccessUrl("/")
                 .failureUrl("/login")

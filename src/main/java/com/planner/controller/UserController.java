@@ -18,7 +18,6 @@ public class UserController{
 
     @GetMapping("/info")
     public UserInfoDTO getInfo(@RequestParam int uno){
-        System.out.println("test");
         return userService.getInfo(uno);
     }
 

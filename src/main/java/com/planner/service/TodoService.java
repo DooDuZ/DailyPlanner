@@ -146,6 +146,42 @@ public class TodoService {
         return todoList;
     }
 
+    public List<TodoDTO> getMonthList(int pno, int year, int month){
+        List<TodoDTO> todoList = new ArrayList<>();
+        UserEntity userEntity = isLoginService.getUserInfo();
+
+        if(userEntity == null){ // 유저 정보 없음
+            log.info("getMonthList {}", "empty user");
+            return null;
+        }
+
+        PlannerEntity plannerEntity = null;
+
+        for(AuthEntity authEntity : userEntity.getAuthEntityList()){
+            PlannerEntity p = authEntity.getPlannerEntity();
+            if(p.getPNo() == pno){
+                plannerEntity = p;
+                log.info("getMonthList - planner {}", p);
+                break;
+            }
+        }
+
+        if(plannerEntity==null){ return null;}  // 플래너 권한 없음
+
+        String date = String.valueOf(year) + "-" + ( month < 10 ? "0"+String.valueOf(month) : String.valueOf(month) );
+
+        List<TodoEntity> entityList = todoRepository.findByMonth(pno, date);
+
+        for(TodoEntity entity : entityList){
+            todoList.add(entity.toDTO());
+        }
+
+        System.out.println("test");
+        System.out.println(todoList.toString());
+
+        return todoList;
+    }
+
     @Transactional
     public int updateTodo(TodoDTO todoDTO){
         log.info("updateTodo", todoDTO);

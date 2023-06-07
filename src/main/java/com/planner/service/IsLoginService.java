@@ -21,6 +21,8 @@ public class IsLoginService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 
+        System.out.println(principal);
+
         if(principal.equals("anonymousUser")){
             return null;
         }

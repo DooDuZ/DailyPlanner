@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../css/Calendar.css';
+import axios from "axios";
+
+let monthList = [];
 
 function Calendar(props){
     const year = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -11,19 +14,24 @@ function Calendar(props){
     const [ selectedYear, setSelectedYear ] = useState( today.getFullYear() );
     const [ monthData, setMonthData ] = useState([]);
 
-    function setMonth( year, month ){
-        let data = [];
+    async function getMonthList( year, month ){
+        monthList = [];
+        // pno 테스트데이터로 넣음
+        await axios.get(`http://localhost:8080/todo/month-list?pno=${2}&year=${year}&month=${month+1}`).then( re => {
+            monthList = [...re.data];
+        })
+    }
 
-        console.log(year);
-        console.log(month);
+    async function setMonth( year, month ){
+        let data = [];
 
         setSelectedYear(year);
         setSelectedMonth(month);
 
+        await getMonthList( year, month );
+
         const lastOfMonth = new Date(year, month+1, 0 ).getDate();
         const firstDay = new Date(year, month, 1).getDay();
-
-        console.log("마지막날 " + lastOfMonth);
 
         let week = [];
 
@@ -64,7 +72,7 @@ function Calendar(props){
         <div className="calendar_wrap">
             <Calendar_Controller selectedYear={selectedYear} selectedMonth={selectedMonth} setMonth={setMonth} year={year} />
             <Calendar_Header week={week} />
-            <Calendar_Body monthData={monthData}/>
+            <Calendar_Body monthData={monthData} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} monthList={monthList} />
         </div>
     )
 }
@@ -73,7 +81,7 @@ function Calendar_Controller(props){
     return (
         <div className="controller_wrap">
             <div className="calendar_year">
-                <h3> {props.selectedYear} </h3>
+                <h3 className="display_year"> {props.selectedYear} </h3>
             </div>
 
             <div className="calender_controller">
@@ -89,7 +97,7 @@ function Calendar_Controller(props){
                 } className="controllerBtn">
                     <img src={process.env.PUBLIC_URL +"/img/leftArrow.png"} />
                 </button>
-                <div className="controller_display">
+                <div className="display_month">
                     <h3> {props.year[props.selectedMonth]}</h3>
                 </div>
                 <button onClick={
@@ -124,6 +132,11 @@ function Calendar_Header(props){
 }
 
 function Calendar_Body(props){
+
+    const todayYear = props.today.getFullYear();
+    const todayMonth = props.today.getMonth();
+    const todayDate = props.today.getDate();
+
     return (
         <div className="calendar_body">
             {
@@ -132,9 +145,19 @@ function Calendar_Body(props){
                         <div className="calendar_row calendar_week" key={ `week${i}` }>
                             {
                                 w.map( (d)=>{
-                                    return(
-                                        d<=0 ? <DayCell keyName={`space${d}`} /> : <DayCell day={d} keyName={`day${d}`}/>
-                                    )
+                                    if(d==0){
+                                        return(
+                                            <DayCell keyName={`space${d}`} />
+                                        )
+                                    }else if( (props.selectedYear == todayYear && props.selectedMonth == todayMonth && d == todayDate) ){
+                                        return (
+                                            <DayCell day={d} id="todayCell" keyName={`day${d}`}/>
+                                        )
+                                    }else{
+                                        return(
+                                            <DayCell day={d} id="" keyName={`day${d}`}/>
+                                        )
+                                    }
                                 } )
                             }
                         </div>
@@ -147,8 +170,11 @@ function Calendar_Body(props){
 
 function DayCell(props){
     return(
-        <div className="dayCell" key={props.keyName}>
-            {props.day}
+        <div className={"dayCell"+` ${props.id}`} key={props.keyName}>
+            <p>{props.day}</p>
+            <div className="list_preview">
+
+            </div>
         </div>
     )
 }
