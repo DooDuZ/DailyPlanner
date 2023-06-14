@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from '../css/Calendar.css';
 import axios from "axios";
+import Sidebar from './Sidebar.jsx';
+import DayModal from './DayModal.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 let monthList = [];
+let isSidebar = false;
 
 function Calendar(props){
     const year = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -12,7 +16,51 @@ function Calendar(props){
 
     const [ selectedMonth, setSelectedMonth ] = useState( today.getMonth() );
     const [ selectedYear, setSelectedYear ] = useState( today.getFullYear() );
+
+    // used calendar_body
     const [ monthData, setMonthData ] = useState([]);
+
+    // used sidebar
+    const [ plannerList, setPlannerList ] = useState([]);
+
+    // used DayModal
+    const [ isVisible, setIsVisible ] = useState(false);
+
+    const modalHandler = ( value ) =>{
+        console.log("실행");
+        console.log( value );
+        setIsVisible( value );
+    }
+
+    function getPlannerList(){
+        axios.get("/planner/list").then( (re)=>{
+            let data = [...re.data];
+            setPlannerList(data);
+        })
+    }
+
+    function setSidebar(){
+        if( !isSidebar ){
+            openSidebar();
+        }else{
+            closeSidebar();
+        }
+    }
+
+    const openSidebar = () => {
+        console.log("open");
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.style.left = 0;
+        isSidebar = true;
+        getPlannerList();
+    }
+
+    const closeSidebar = () => {
+        console.log("close");
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.style.left = "-400px";
+        isSidebar = false;
+    }
 
     async function getMonthList( year, month ){
         monthList = [];
@@ -70,9 +118,12 @@ function Calendar(props){
 
     return (
         <div className="calendar_wrap">
+            <button onClick={ () =>{ setSidebar() }} className="menuBtn"> <img src={process.env.PUBLIC_URL+"/img/menu.png"} /> </button>
+            <Sidebar plannerList={plannerList} onMouseOver={ ()=>{console.log("open")} } onMouseOut={()=>{ console.log("close") }} />
             <Calendar_Controller selectedYear={selectedYear} selectedMonth={selectedMonth} setMonth={setMonth} year={year} />
             <Calendar_Header week={week} />
-            <Calendar_Body monthData={monthData} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} monthList={monthList} />
+            <Calendar_Body monthData={monthData} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} monthList={monthList} openModal={ ()=>{ modalHandler(true) } } />
+            <DayModal show={isVisible} onHide={ ()=>{setIsVisible(false)}} />
         </div>
     )
 }
@@ -137,6 +188,19 @@ function Calendar_Body(props){
     const todayMonth = props.today.getMonth();
     const todayDate = props.today.getDate();
 
+    let days = new Map();
+
+    for(let i = 1 ; i <= new Date(todayYear, todayMonth+1, 0).getDate() ;i++){
+        days.set( i, [] );
+    }
+
+    if(props.monthList != null){
+        monthList.map( ( e )=>{
+            let day = new Date(e.stime).getDate();
+            days.get(day).push(e);
+        } )
+    }
+
     return (
         <div className="calendar_body">
             {
@@ -145,17 +209,17 @@ function Calendar_Body(props){
                         <div className="calendar_row calendar_week" key={ `week${i}` }>
                             {
                                 w.map( (d)=>{
-                                    if(d==0){
+                                    if(d<=0){
                                         return(
-                                            <DayCell keyName={`space${d}`} />
+                                            <DayCell keyName={`space${d}`} list={[]} openModal={ ()=>{alert("empty!")}} />
                                         )
                                     }else if( (props.selectedYear == todayYear && props.selectedMonth == todayMonth && d == todayDate) ){
                                         return (
-                                            <DayCell day={d} id="todayCell" keyName={`day${d}`}/>
+                                            <DayCell day={d} id="todayCell" keyName={`day${d}`} list={days.get(d)} openModal={ props.openModal }/>
                                         )
                                     }else{
                                         return(
-                                            <DayCell day={d} id="" keyName={`day${d}`}/>
+                                            <DayCell day={d} id="" keyName={`day${d}`} list={days.get(d)} openModal={ props.openModal }/>
                                         )
                                     }
                                 } )
@@ -170,10 +234,20 @@ function Calendar_Body(props){
 
 function DayCell(props){
     return(
-        <div className={"dayCell"+` ${props.id}`} key={props.keyName}>
+        <div className={"dayCell"+` ${props.id}`} key={props.keyName} onClick={props.openModal}>
             <p>{props.day}</p>
             <div className="list_preview">
-
+                {props.list == null ? "" :
+                    <ul>
+                        {
+                            props.list.map( (e)=>{
+                                return(
+                                    <li> <img src={process.env.PUBLIC_URL +"/img/listStyle.png"} /> {e.title} </li>
+                                )
+                            } )
+                        }
+                    </ul>
+                }
             </div>
         </div>
     )

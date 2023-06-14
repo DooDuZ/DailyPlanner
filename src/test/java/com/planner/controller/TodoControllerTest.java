@@ -21,7 +21,6 @@ class TodoControllerTest {
     public void createTodo(){
         String sTime = "2023-05-26T18:28";
         LocalDateTime date = LocalDateTime.parse(sTime);
-        System.out.println(date);
     }
 
     @Test

@@ -11,6 +11,22 @@ h3{
     justify-content : center;
     align-items : center;
     font-family: 'Noto Sans KR', sans-serif;
+    position : relative;
+}
+
+.menuBtn{
+    position : absolute;
+    left : 50px;
+    top : 50px;
+    cursor : pointer;
+    border : none;
+    background : none;
+    z-index : 10;
+}
+
+.menuBtn img{
+    width : 30px;
+    height : 30px;
 }
 
 .controller_wrap{
@@ -52,7 +68,7 @@ h3{
 
 
 .calendar_header{
-    width : 1407px;
+    width : 1295px;
     background-color: #fff1ef;
     border-radius: 10px;
     vertical-align: middle;
@@ -105,7 +121,7 @@ h3{
     font-weight : bold;
     border-radius: 50%;
     position : relative;
-    z-index : 10;
+    z-index : 2;
 }
 
 .todayCell p:after{
@@ -123,7 +139,23 @@ h3{
 
 .list_preview{
     text-align: left;
-    color : #eeeeee;
-    font-size : 10px;
+    font-size : 13px;
     margin : 5px 0 5px 0;
+}
+
+.list_preview ul{
+    padding : 0;
+    list-style : none;
+}
+
+.list_preview ul li{
+    display : flex;
+    align-items : center;
+}
+
+.list_preview ul li img{
+    margin-right : 3px;
+    padding : 3px;
+    width : 10px;
+    height : 10px;
 }

@@ -35,9 +35,11 @@ public class PlannerEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "plannerEntity" , cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     List<TodoEntity> todoEntityList = new ArrayList<>();
     @OneToMany(mappedBy = "plannerEntity" , cascade = CascadeType.ALL)
     @Builder.Default
+    @ToString.Exclude
     List<AuthEntity> authEntityList = new ArrayList<>();
 
     public PlannerDTO toDTO(){
@@ -46,6 +48,6 @@ public class PlannerEntity extends BaseEntity {
             UserEntity userEntity = entity.getUserEntity();
             authUserList.add(userEntity.getUId());
         }
-        return PlannerDTO.builder().pNo(this.pNo).authUserList(authUserList).pName(this.pName).build();
+        return PlannerDTO.builder().pNo(this.pNo).authUserList(authUserList).pName(this.pName).pType(type.getTNo()).build();
     }
 }

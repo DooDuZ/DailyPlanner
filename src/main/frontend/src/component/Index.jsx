@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from './Calendar.jsx';
 import styles from '../css/Index.css';
-import Footer from './Footer.jsx';
 import Login from './Login.jsx';
 import axios from 'axios';
+import Footer from './Footer.jsx';
 
 export default function Index(props){
 
@@ -11,7 +11,7 @@ export default function Index(props){
 
     function getUser(){
         axios.get("/user/login-info").then(
-            (re) =>{ setIsLogIn(re.data); }
+            (re) =>{ console.log(re); setIsLogIn(re.data); }
         );
     }
 
@@ -20,7 +20,6 @@ export default function Index(props){
     return (
         <div>
             { isLogin ? <Calendar /> : <Login /> }
-
             <Footer />
         </div>
     )

@@ -176,9 +176,6 @@ public class TodoService {
             todoList.add(entity.toDTO());
         }
 
-        System.out.println("test");
-        System.out.println(todoList.toString());
-
         return todoList;
     }
 

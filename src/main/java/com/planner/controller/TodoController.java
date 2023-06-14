@@ -19,7 +19,6 @@ public class TodoController {
 
     @PutMapping("/completed")
     public int completed(@RequestBody TodoDTO todoDTO){
-        System.out.println(todoDTO);
         return todoService.completed(todoDTO);
     }
 
@@ -44,7 +43,6 @@ public class TodoController {
 
     @GetMapping("/month-list")
     public List<TodoDTO> getMonthList(@RequestParam int pno, @RequestParam int year, @RequestParam int month){
-        System.out.println(pno + ", " + year + " , " + month);
         return todoService.getMonthList(pno, year, month);
     }
 
