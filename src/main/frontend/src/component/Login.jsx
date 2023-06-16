@@ -1,4 +1,4 @@
-import react from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function Login(props){
@@ -8,7 +8,13 @@ export default function Login(props){
         let formData = new FormData(form);
 
         axios.post("/user/login", formData, {headers : { 'Content-Type': 'multipart/form-data'} } )
-            .then( re => console.log(re) )
+            .then( re => {
+                console.log(re);
+                if(re.data.success==true){
+                    // eslint-disable-next-line no-restricted-globals
+                    window.location.href = "/";
+                }
+            })
     }
 
     return (

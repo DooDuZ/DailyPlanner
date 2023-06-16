@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
             return 3;
         }
         userDTO.setUPassword(passwordEncoder.encode(userDTO.getUPassword()));
-        userDTO.setURole("일반회원");
+        userDTO.setURole("ROLE_일반회원");
 
         UserEntity userEntity = userDTO.toEntity();
 

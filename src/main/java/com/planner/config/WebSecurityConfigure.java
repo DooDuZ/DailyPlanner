@@ -1,5 +1,7 @@
 package com.planner.config;
 
+import com.planner.filter.LoginFailureHandler;
+import com.planner.filter.LoginSuccessHandler;
 import com.planner.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfigure {
+
+    LoginSuccessHandler loginSuccessHandler = new LoginSuccessHandler();
+    LoginFailureHandler loginFailureHandler = new LoginFailureHandler();
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -28,11 +33,15 @@ public class WebSecurityConfigure {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, UserService userService) throws Exception {
         httpSecurity
+            .authorizeHttpRequests()
+                .antMatchers("/").hasRole("일반회원")
+                .antMatchers("/**").permitAll()
+            .and()
             .formLogin()
-                .loginPage("/")
+                .loginPage("/login")
                 .loginProcessingUrl("/user/login")
-                .defaultSuccessUrl("/")
-                .failureUrl("/login")
+                .successHandler(loginSuccessHandler)
+                .failureHandler(loginFailureHandler)
                 .usernameParameter("uid")
                 .passwordParameter("upassword")
             .and()

@@ -4,11 +4,16 @@ import axios from "axios";
 import Sidebar from './Sidebar.jsx';
 import DayModal from './DayModal.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import listStyle from '../img/listStyle.png';
+import leftArrow from '../img/leftArrow.png';
+import rightArrow from '../img/rightArrow.png';
+import menu from '../img/menu.png';
 
 let monthList = [];
 let isSidebar = false;
 
 function Calendar(props){
+
     const year = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const week = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ];
 
@@ -17,25 +22,39 @@ function Calendar(props){
     const [ selectedMonth, setSelectedMonth ] = useState( today.getMonth() );
     const [ selectedYear, setSelectedYear ] = useState( today.getFullYear() );
 
-    // used calendar_body
-    const [ monthData, setMonthData ] = useState([]);
-
     // used sidebar
     const [ plannerList, setPlannerList ] = useState([]);
+    const [ selectedPno, setSelectedPno ] = useState(0);
 
     // used DayModal
     const [ isVisible, setIsVisible ] = useState(false);
 
+    // used calendar_body
+    const [ monthData, setMonthData ] = useState([]);
+
     const modalHandler = ( value ) =>{
-        console.log("실행");
-        console.log( value );
         setIsVisible( value );
     }
 
-    function getPlannerList(){
-        axios.get("/planner/list").then( (re)=>{
+    async function getPlannerList(){
+        await axios.get("/planner/list").then( (re)=>{
             let data = [...re.data];
+
+            console.log(data);
+
+            data.sort( (e1, e2)=>{
+                return e1.ptype - e2.ptype;
+            });
+
+            const personal = Number(data[0].pno);
+
             setPlannerList(data);
+            if(selectedPno==0){ // 플래너가 선택되어있지 않은 경우 개인 플래너를 선택
+                console.log(personal + "번 플래너")
+                setSelectedPno(personal);
+            }
+
+            console.log("plannerList 가져오기 완료");
         })
     }
 
@@ -48,7 +67,6 @@ function Calendar(props){
     }
 
     const openSidebar = () => {
-        console.log("open");
         const sidebar = document.querySelector('.sidebar');
         sidebar.style.left = 0;
         isSidebar = true;
@@ -56,16 +74,16 @@ function Calendar(props){
     }
 
     const closeSidebar = () => {
-        console.log("close");
         const sidebar = document.querySelector('.sidebar');
         sidebar.style.left = "-400px";
         isSidebar = false;
     }
 
     async function getMonthList( year, month ){
+        console.log(selectedPno + "번 플래너")
         monthList = [];
         // pno 테스트데이터로 넣음
-        await axios.get(`http://localhost:8080/todo/month-list?pno=${2}&year=${year}&month=${month+1}`).then( re => {
+        await axios.get(`http://localhost:8080/todo/month-list?pno=${selectedPno}&year=${year}&month=${month+1}`).then( re => {
             monthList = [...re.data];
         })
     }
@@ -110,15 +128,23 @@ function Calendar(props){
         }
 
         setMonthData( [...data] );
+
+        console.log(monthList);
+        console.log(" 월 데이터 처리 완료 ");
     }
 
     useEffect(
-        ()=>{ setMonth(selectedYear, selectedMonth)}, []
-    );
+        ()=>{ setMonth(selectedYear, selectedMonth); },
+        [selectedPno]
+    )
+
+    useEffect(
+        ()=>{getPlannerList().then( (re)=>{ console.log("plannerList") } );}
+    , [] )
 
     return (
         <div className="calendar_wrap">
-            <button onClick={ () =>{ setSidebar() }} className="menuBtn"> <img src={process.env.PUBLIC_URL+"/img/menu.png"} /> </button>
+            <button onClick={ () =>{ setSidebar() }} className="menuBtn"> <img src={menu} /> </button>
             <Sidebar plannerList={plannerList} onMouseOver={ ()=>{console.log("open")} } onMouseOut={()=>{ console.log("close") }} />
             <Calendar_Controller selectedYear={selectedYear} selectedMonth={selectedMonth} setMonth={setMonth} year={year} />
             <Calendar_Header week={week} />
@@ -146,7 +172,7 @@ function Calendar_Controller(props){
                         }
                     }
                 } className="controllerBtn">
-                    <img src={process.env.PUBLIC_URL +"/img/leftArrow.png"} />
+                    <img src={leftArrow} />
                 </button>
                 <div className="display_month">
                     <h3> {props.year[props.selectedMonth]}</h3>
@@ -161,7 +187,7 @@ function Calendar_Controller(props){
                         }
                     }
                 } className="controllerBtn">
-                    <img src={process.env.PUBLIC_URL +"/img/rightArrow.png"} />
+                    <img src={rightArrow} />
                 </button>
             </div>
         </div>
@@ -190,13 +216,15 @@ function Calendar_Body(props){
 
     let days = new Map();
 
-    for(let i = 1 ; i <= new Date(todayYear, todayMonth+1, 0).getDate() ;i++){
+    for(let i = 1 ; i <= new Date(props.selectedYear, props.selectedMonth+1, 0).getDate(); i++){
         days.set( i, [] );
     }
 
     if(props.monthList != null){
         monthList.map( ( e )=>{
             let day = new Date(e.stime).getDate();
+            console.log(day);
+            console.log(days.get(day));
             days.get(day).push(e);
         } )
     }
@@ -242,7 +270,7 @@ function DayCell(props){
                         {
                             props.list.map( (e)=>{
                                 return(
-                                    <li> <img src={process.env.PUBLIC_URL +"/img/listStyle.png"} /> {e.title} </li>
+                                    <li> <img src={listStyle} /> {e.title} </li>
                                 )
                             } )
                         }
