@@ -11,6 +11,7 @@ import menu from '../img/menu.png';
 
 let monthList = [];
 let isSidebar = false;
+let selectedDay = 0;
 
 function Calendar(props){
 
@@ -21,6 +22,7 @@ function Calendar(props){
 
     const [ selectedMonth, setSelectedMonth ] = useState( today.getMonth() );
     const [ selectedYear, setSelectedYear ] = useState( today.getFullYear() );
+
 
     // used sidebar
     const [ plannerList, setPlannerList ] = useState([]);
@@ -39,8 +41,6 @@ function Calendar(props){
     async function getPlannerList(){
         await axios.get("/planner/list").then( (re)=>{
             let data = [...re.data];
-
-            console.log(data);
 
             data.sort( (e1, e2)=>{
                 return e1.ptype - e2.ptype;
@@ -148,8 +148,15 @@ function Calendar(props){
             <Sidebar plannerList={plannerList} onMouseOver={ ()=>{console.log("open")} } onMouseOut={()=>{ console.log("close") }} />
             <Calendar_Controller selectedYear={selectedYear} selectedMonth={selectedMonth} setMonth={setMonth} year={year} />
             <Calendar_Header week={week} />
-            <Calendar_Body monthData={monthData} today={today} selectedYear={selectedYear} selectedMonth={selectedMonth} monthList={monthList} openModal={ ()=>{ modalHandler(true) } } />
-            <DayModal show={isVisible} onHide={ ()=>{setIsVisible(false)}} />
+            <Calendar_Body
+                monthData={monthData}
+                today={today}
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                monthList={monthList}
+                openModal={ ()=>{ modalHandler(true) } }
+             />
+            <DayModal show={isVisible} onHide={ ()=>{setIsVisible(false)}} selectedYear={selectedYear} selectedMonth={selectedMonth} selectedDay={selectedDay} year={year} />
         </div>
     )
 }
@@ -223,8 +230,6 @@ function Calendar_Body(props){
     if(props.monthList != null){
         monthList.map( ( e )=>{
             let day = new Date(e.stime).getDate();
-            console.log(day);
-            console.log(days.get(day));
             days.get(day).push(e);
         } )
     }
@@ -262,7 +267,14 @@ function Calendar_Body(props){
 
 function DayCell(props){
     return(
-        <div className={"dayCell"+` ${props.id}`} key={props.keyName} onClick={props.openModal}>
+        <div className={"dayCell"+` ${props.id}`} key={props.keyName} onClick={
+            ()=>{
+                console.log(props.day+"클릭");
+                selectedDay = props.day;
+                console.log(selectedDay+"일 모달 실행");
+                props.openModal();
+            }
+        }>
             <p>{props.day}</p>
             <div className="list_preview">
                 {props.list == null ? "" :

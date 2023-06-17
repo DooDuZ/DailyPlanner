@@ -1,0 +1,38 @@
+.dayModal_header p{
+    margin : 0;
+    font-family: 'Nunito';
+    font-weight : bold;
+}
+
+.dateBox{
+    display : flex;
+    align-items : center;
+}
+
+.modalController{
+    width : 30px;
+    height : 30px;
+    margin : 0 20px 0 20px;
+}
+
+.dayBox{
+    font-size: 55px;
+    display : flex;
+    align-items : center;
+}
+
+.monthBox{
+    display: flex;
+    flex-direction: column;
+    justify-content : center;
+    align-items : center;
+}
+
+.modalYear{
+    font-size: 17px;
+}
+
+.modalMonth{
+    font-size: 17px;
+}
+
