@@ -7,6 +7,24 @@
     color : white;
 }
 
+.dayModal_body{
+    height : 500px;
+    margin  : 0 auto;
+    width : 90%;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.body_contents{
+    height : 90%;
+    word-break: break-all;
+    overflow-y : scroll;
+}
+
+.body_contents::-webkit-scrollbar{width: 5px;}
+.body_contents::-webkit-scrollbar-track{ background-color: grey; border-radius: 10px; box-shadow: inset 0px 0px 5px white; display : none;}
+.body_contents::-webkit-scrollbar-thumb{ background-color: #eeeeee; border-radius: 10px; }
+
 .dayModal_footer{
     border : none !important;
 }
@@ -65,6 +83,48 @@
     top: -61px;
     right: 30px;
 }
+
+.body_top{
+    display : flex;
+    justify-content : space-between;
+    align-items : center;
+}
+
+.body_top_title{
+    font-family: 'KCC-Ganpan';
+    font-size : 30px;
+    color : white;
+}
+
+.body_top_img img{
+    width : 30px;
+    height : 30px;
+}
+
+.completed, .todo{
+    padding : 5px;
+    display : flex;
+    word-break: break-all;
+    justify-content : space-between;
+    font-family : 'Noto Sans KR', sans-serif;
+}
+
+.todo_toggle{
+    width : 10px;
+    height : 10px;
+    transition : all 0.5s linear;
+}
+
+.completed{
+     font-style: italic;
+     color : grey;
+}
+
+.todo{
+    color : #3d2f2f;
+    font-weight : bold;
+}
+
 
 .modalBtn{
     width: 65px;

@@ -12,6 +12,7 @@ import menu from '../img/menu.png';
 let monthList = [];
 let isSidebar = false;
 let selectedDay = 0;
+let todoList;
 
 function Calendar(props){
 
@@ -156,7 +157,16 @@ function Calendar(props){
                 monthList={monthList}
                 openModal={ ()=>{ modalHandler(true) } }
              />
-            {isVisible ? <DayModal show={isVisible} onHide={ ()=>{setIsVisible(false)}} selectedYear={selectedYear} selectedMonth={selectedMonth} selectedDay={selectedDay} year={year} /> : null }
+            {isVisible ?
+                <DayModal
+                    show={isVisible}
+                    onHide={ ()=>{setIsVisible(false)}}
+                    selectedYear={selectedYear}
+                    selectedMonth={selectedMonth}
+                    selectedDay={selectedDay}
+                    year={year}
+                    todoList={todoList}
+                 /> : null }
         </div>
     )
 }
@@ -244,7 +254,7 @@ function Calendar_Body(props){
                                 w.map( (d)=>{
                                     if(d<=0){
                                         return(
-                                            <DayCell keyName={`space${d}`} list={[]} openModal={ ()=>{alert("empty!")}} />
+                                            <DayCell keyName={`space${d}`} list={[]} openModal={ ()=>{}} />
                                         )
                                     }else if( (props.selectedYear == todayYear && props.selectedMonth == todayMonth && d == todayDate) ){
                                         return (
@@ -270,6 +280,7 @@ function DayCell(props){
         <div className={"dayCell"+` ${props.id}`} key={props.keyName} onClick={
             ()=>{
                 selectedDay = props.day;
+                todoList = [...props.list];
                 props.openModal();
             }
         }>

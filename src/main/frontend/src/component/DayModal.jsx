@@ -7,11 +7,41 @@ let lastDay = 0;
 let selectedYear;
 let selectedMonth;
 function DayModal(props) {
+    console.log(props.todoList);
 
     const year = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-    const constellation = [];
+    const stella = [
+        "/img/stars/염소자리_icon4.png",
+        "/img/stars/물병자리_icon.png",
+        "/img/stars/물고기자리_icon2.png",
+        "/img/stars/양자리_icon.png",
+        "/img/stars/황소자리_icon.png",
+        "/img/stars/쌍둥이자리_icon.png",
+        "/img/stars/게자리_icon.png",
+        "/img/stars/사자자리_icon2.png",
+        "/img/stars/처녀자리_icon2.png",
+        "/img/stars/천칭자리_icon3.png",
+        "/img/stars/전갈자리_icon.png",
+        "/img/stars/궁수자리_icon2.png",
+    ];
 
     const [ selectedDay, setSelectedDay ] = useState(props.selectedDay);
+
+    function getStellaIndex( month, day ){
+        let value = month*100 + day;
+        if( value >= 1225 || value<=119 ){ return 0; }
+        else if( value <= 218 ){ return 1; }
+        else if( value <= 320 ){ return 2; }
+        else if( value <= 419 ){ return 3; }
+        else if( value <= 520 ){ return 4; }
+        else if( value <= 621 ){ return 5; }
+        else if( value <= 722 ){ return 6; }
+        else if( value <= 822 ){ return 7; }
+        else if( value <= 922 ){ return 8; }
+        else if( value <= 1022 ){ return 9; }
+        else if( value <= 1122 ){ return 10; }
+        else if( value <= 1224 ){ return 11; }
+    }
 
     selectedYear = props.selectedYear;
     selectedMonth = props.selectedMonth;
@@ -41,6 +71,11 @@ function DayModal(props) {
         setSelectedDay(change);
     }
 
+    const rotateToggle = ( e ) =>{
+        const toggle = e.target;
+        toggle.style.rotate = "90deg";
+    }
+
     return (
       <Modal
         {...props}
@@ -48,7 +83,7 @@ function DayModal(props) {
         centered
       >
         <div className = "stella_img">
-            <img src= {"/img/stars/게자리_icon.png"} />
+            <img src= { stella[getStellaIndex( props.selectedMonth+1, selectedDay )]} />
         </div>
         <Modal.Header className="dayModal_header">
             <div className="dateBox">
@@ -68,7 +103,21 @@ function DayModal(props) {
             </div>
         </Modal.Header>
         <Modal.Body className="dayModal_body">
-
+            <div className="body_top">
+                 <div className="body_top_title"> Todo List </div>
+                 <div className="body_top_img"> <img src="/img/ect/plusbtn_pink.png" /> </div>
+            </div>
+             <div className="body_contents">
+                {
+                    props.todoList.map( ( el, i ) => {
+                        return (
+                            <div className={el.completed ? "completed" : "todo"} key={el.title + i}>
+                                <span> <img src="/img/ect/toggle.png" className="todo_toggle" onClick={ (e)=>{ rotateToggle(e); } } /> {el.title}</span> <span> {el.completed ? "completed" : "before"} </span>
+                            </div>
+                        )
+                    } )
+                }
+             </div>
         </Modal.Body>
         <Modal.Footer className="dayModal_footer">
           <button onClick={props.onHide} className="modalBtn">Close</button>
