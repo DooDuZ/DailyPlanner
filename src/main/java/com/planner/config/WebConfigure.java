@@ -21,7 +21,7 @@ public class WebConfigure implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
 
-        // 리액트 앱의 클라이언트 사이드 라우팅 처리를 위한 설정입니다.
+        // 리액트 앱의 클라이언트 사이드 라우팅 처리를 위한 설정
         registry.addViewController("/{spring:\\w+}")
                 .setViewName("forward:/");
         registry.addViewController("/**/{spring:\\w+}")

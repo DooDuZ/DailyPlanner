@@ -10,15 +10,16 @@
 }
 
 .modalController{
-    width : 30px;
-    height : 30px;
+    width : 25px;
+    height : 25px;
     margin : 0 20px 0 20px;
 }
 
 .dayBox{
-    font-size: 55px;
+    font-size: 45px;
     display : flex;
     align-items : center;
+    margin-right : 3px;
 }
 
 .monthBox{
@@ -29,10 +30,20 @@
 }
 
 .modalYear{
-    font-size: 17px;
+    font-size: 15px;
+    position: relative;
+    top: 5px;
 }
 
 .modalMonth{
-    font-size: 17px;
+    font-size: 22px;
+    position: relative;
+    top: -2px;
 }
 
+.stella_img img{
+    height: 130px;
+    position: absolute;
+    top: -61px;
+    right: 30px;
+}

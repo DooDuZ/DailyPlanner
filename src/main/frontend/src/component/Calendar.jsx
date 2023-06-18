@@ -156,7 +156,7 @@ function Calendar(props){
                 monthList={monthList}
                 openModal={ ()=>{ modalHandler(true) } }
              />
-            <DayModal show={isVisible} onHide={ ()=>{setIsVisible(false)}} selectedYear={selectedYear} selectedMonth={selectedMonth} selectedDay={selectedDay} year={year} />
+            {isVisible ? <DayModal show={isVisible} onHide={ ()=>{setIsVisible(false)}} selectedYear={selectedYear} selectedMonth={selectedMonth} selectedDay={selectedDay} year={year} /> : null }
         </div>
     )
 }
@@ -269,9 +269,7 @@ function DayCell(props){
     return(
         <div className={"dayCell"+` ${props.id}`} key={props.keyName} onClick={
             ()=>{
-                console.log(props.day+"클릭");
                 selectedDay = props.day;
-                console.log(selectedDay+"일 모달 실행");
                 props.openModal();
             }
         }>
