@@ -1,3 +1,16 @@
+.modal-content {
+    background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+}
+
+.dayModal_header{
+    border : none !important;
+    color : white;
+}
+
+.dayModal_footer{
+    border : none !important;
+}
+
 .dayModal_header p{
     margin : 0;
     font-family: 'Nunito';
@@ -7,12 +20,17 @@
 .dateBox{
     display : flex;
     align-items : center;
+    color : #fff;
 }
 
 .modalController{
     width : 25px;
     height : 25px;
     margin : 0 20px 0 20px;
+}
+
+.modalController.rightBtn{
+    rotate : 180deg;
 }
 
 .dayBox{
@@ -46,4 +64,18 @@
     position: absolute;
     top: -61px;
     right: 30px;
+}
+
+.modalBtn{
+    width: 65px;
+    height: 35px;
+    border-radius: 30px;
+    background: #fff;
+    font-weight: bold;
+    border : none;
+    color : black;
+}
+
+.modalBtn:hover{
+    color : #ffc9c1;
 }

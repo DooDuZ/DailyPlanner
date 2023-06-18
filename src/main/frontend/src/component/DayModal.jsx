@@ -2,8 +2,6 @@ import react, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styles from '../css/dayModal.css';
-import leftArrow from '../img/leftArrow.png';
-import rightArrow from '../img/rightArrow.png';
 
 let lastDay = 0;
 let selectedYear;
@@ -54,7 +52,7 @@ function DayModal(props) {
         </div>
         <Modal.Header className="dayModal_header">
             <div className="dateBox">
-                <img src={leftArrow} className="modalController" onClick={ ()=>{
+                <img src="/img/ect/whiteArrow.png" className="modalController" onClick={ ()=>{
                     prevDayHandler(selectedDay);
                 }}/>
                 <div className="dayBox">
@@ -64,7 +62,7 @@ function DayModal(props) {
                     <p className="modalYear">{props.selectedYear}</p>
                     <p className="modalMonth">{year[props.selectedMonth]}</p>
                 </div>
-                <img src={rightArrow} className="modalController" onClick={ ()=>{
+                <img src="/img/ect/whiteArrow.png" className="modalController rightBtn" onClick={ ()=>{
                     nextDayHandler(selectedDay);
                 }}/>
             </div>
@@ -72,8 +70,8 @@ function DayModal(props) {
         <Modal.Body className="dayModal_body">
 
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
+        <Modal.Footer className="dayModal_footer">
+          <button onClick={props.onHide} className="modalBtn">Close</button>
         </Modal.Footer>
       </Modal>
     );
