@@ -54,12 +54,6 @@ public class TodoService {
 
         todoEntity.setPlannerEntity(plannerEntity);
 
-        if( todoEntity.getETime()!=null ){
-            if(todoEntity.getCloser() == null){
-                todoEntity.setCloser(userEntity);
-            }
-        }
-
         if(todoRepository.save(todoEntity).getTNo() != 0 ){ // 저장 성공
             return 1;
         }

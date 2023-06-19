@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styles from '../css/dayModal.css';
 import axios from 'axios';
+import Toggle from './Toggle.jsx';
 
 let lastDay = 0;
 let selectedYear;
@@ -30,6 +31,14 @@ function DayModal(props) {
     async function getDayList(){
         const res = await axios.get(`/todo/list/day?pno=${props.selectedPno}&year=${selectedYear}&month=${selectedMonth+1}&day=${selectedDay}`);
         let list = [...res.data];
+
+        list.sort( (e1,e2)=>{
+            if(e1.completed == e2.completed){
+                return new Date(e1.stime) - new Date(e2.stime);
+            }
+            return e1.completed - e2.completed;
+        })
+        console.log(list);
         setTodoList(list);
     }
 
@@ -92,11 +101,6 @@ function DayModal(props) {
         setSelectedDay(change);
     }
 
-    const rotateToggle = ( e ) =>{
-        const toggle = e.target;
-        toggle.style.rotate = "90deg";
-    }
-
     return (
       <Modal
         {...props}
@@ -132,12 +136,13 @@ function DayModal(props) {
                 {
                     todoList.map( ( el, i ) => {
                         return (
-                            <div className={el.completed ? "completed" : "todo"} key={el.title + i}>
-                                <span> <img src="/img/ect/toggle.png" className="todo_toggle" onClick={ (e)=>{ rotateToggle(e); } } /> {el.title}</span>
-                                <span className="todo_completed" onClick={ ()=>{ checked( el.tno, !el.completed ); } }> {el.completed ? "completed" : "before"} </span>
-                            </div>
+                            <Toggle
+                                todo={el}
+                                key={el.title + i}
+                                checked={checked}
+                            />
                         )
-                    } )
+                    })
                 }
              </div>
         </Modal.Body>

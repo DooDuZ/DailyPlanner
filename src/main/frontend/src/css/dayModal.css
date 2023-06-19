@@ -109,23 +109,6 @@
     font-family : 'Noto Sans KR', sans-serif;
 }
 
-.todo_toggle{
-    width : 10px;
-    height : 10px;
-    transition : all 0.5s linear;
-}
-
-.completed{
-     font-style: italic;
-     color : grey;
-}
-
-.todo{
-    color : #3d2f2f;
-    font-weight : bold;
-}
-
-
 .modalBtn{
     width: 65px;
     height: 35px;

@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito&display=swap');
+
+@font-face {
+    font-family: 'Hana_handwriting';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_05@1.0/Hana_handwriting.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KyoboHandwriting2021sjy';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KyoboHandwriting2021sjy.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.toggle_top{
+    font-family : 'Noto Sans KR', sans-serif;
+    display : flex;
+    justify-content: space-between;
+    font-family :
+}
+
+.toggle_left{
+    display : flex;
+    padding : 3px;
+    align-items: center;
+}
+
+.toggle_btn, .toggle_time, .toggle_title{
+    padding : 3px;
+}
+
+.toggle_title{
+    width : 240px;
+    word-break : break-all;
+    overflow: hidden;
+}
+
+.toggle_btn{
+    width : 15px;
+    height : 15px;
+    transition : all 0.3s linear;
+}
+
+.toggle_right{
+    cursor : pointer;
+}
+
+.completed{
+     font-style: italic;
+     color : grey;
+}
+
+.todo{
+    color : #3d2f2f;
+    font-weight : bold;
+}
+
+.toggle_body{
+    position : relative;
+    width : 400px;
+    height: 400px;
+    display : none;
+    margin : 0 auto;
+    background-image : url("../../public/img/background/post2.png");
+    background-size: 620px;
+    background-position-y: center;
+    background-position-x: center;
+}
+
+.toggle_body_text{
+    font-family : 'KyoboHandwriting2021sjy';
+    font-weight : bold;
+    position: absolute;
+    left: 65px;
+    top: 110px;
+    font-size: 20px;
+    width: 270px;
+    word-break : break-all;
+
+    display : flex;
+    flex-direction: column;
+    justify-content: space-between;
+    word-break : break-all;
+    overflow-y : scroll;
+}
+
+.toggle_body_contents{
+    height : 160px;
+}
+
+.toggle_body_text::-webkit-scrollbar{width: 3px;}
+.toggle_body_text::-webkit-scrollbar-track{ background-color: grey; border-radius: 10px; box-shadow: inset 0px 0px 5px white; display : none;}
+.toggle_body_text::-webkit-scrollbar-thumb{ background-color: #eeeeee; border-radius: 10px; }
