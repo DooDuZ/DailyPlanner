@@ -290,4 +290,39 @@ public class TodoService {
 
         return todoDTO;
     }
+
+    public List<TodoDTO> getDayList(int pno, int year, int month, int day){
+        List<TodoDTO> todoList = new ArrayList<>();
+        UserEntity userEntity = isLoginService.getUserInfo();
+
+        if(userEntity == null){ // 유저 정보 없음
+            log.info("getDayList {}", "empty user");
+            return null;
+        }
+
+        PlannerEntity plannerEntity = null;
+
+        for(AuthEntity authEntity : userEntity.getAuthEntityList()){
+            PlannerEntity p = authEntity.getPlannerEntity();
+            if(p.getPNo() == pno){
+                plannerEntity = p;
+                log.info("getDayList - planner {}", p);
+                break;
+            }
+        }
+
+        if(plannerEntity==null){ return null;}  // 플래너 권한 없음
+
+        String date = String.valueOf(year) + "-" + ( month < 10 ? "0"+String.valueOf(month) : String.valueOf(month) )+ "-" + ( day < 10 ? "0"+String.valueOf(day) : String.valueOf(day) );
+
+        List<TodoEntity> entityList = todoRepository.findByMonth(pno, date);
+
+        for(TodoEntity entity : entityList){
+            todoList.add(entity.toDTO());
+        }
+
+        log.info("getDayList - return {}" , todoList);
+
+        return todoList;
+    }
 }

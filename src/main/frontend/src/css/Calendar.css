@@ -100,7 +100,8 @@ h3{
         height: 125px;
         background-color: rgba(255,255,255, 0.3);
         border-radius: 10px;
-        over-flow : hidden;
+        overflow : hidden;
+        cursor : pointer;
 }
 
 .dayCell:nth-child(7n+1){
@@ -115,6 +116,7 @@ h3{
 
 .list_preview{
     color : black;
+    font-weight : normal;
 }
 
 .dayCell p{

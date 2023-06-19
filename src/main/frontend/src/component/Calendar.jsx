@@ -13,6 +13,8 @@ let monthList = [];
 let isSidebar = false;
 let selectedDay = 0;
 let todoList;
+let lastOfMonth;
+let firstDay;
 
 function Calendar(props){
 
@@ -51,11 +53,8 @@ function Calendar(props){
 
             setPlannerList(data);
             if(selectedPno==0){ // 플래너가 선택되어있지 않은 경우 개인 플래너를 선택
-                console.log(personal + "번 플래너")
                 setSelectedPno(personal);
             }
-
-            console.log("plannerList 가져오기 완료");
         })
     }
 
@@ -81,7 +80,6 @@ function Calendar(props){
     }
 
     async function getMonthList( year, month ){
-        console.log(selectedPno + "번 플래너")
         monthList = [];
         // pno 테스트데이터로 넣음
         await axios.get(`http://localhost:8080/todo/month-list?pno=${selectedPno}&year=${year}&month=${month+1}`).then( re => {
@@ -97,8 +95,8 @@ function Calendar(props){
 
         await getMonthList( year, month );
 
-        const lastOfMonth = new Date(year, month+1, 0 ).getDate();
-        const firstDay = new Date(year, month, 1).getDay();
+        lastOfMonth = new Date(year, month+1, 0 ).getDate();
+        firstDay = new Date(year, month, 1).getDay();
 
         let week = [];
 
@@ -129,9 +127,24 @@ function Calendar(props){
         }
 
         setMonthData( [...data] );
+    }
 
-        console.log(monthList);
-        console.log(" 월 데이터 처리 완료 ");
+    const prevMonthHandler = ()=>{
+        let m = selectedMonth-1;
+        if(m >= 0){
+            setMonth( selectedYear, m );
+        }else {
+            setMonth( selectedYear-1, 11 );
+        }
+    }
+
+    const nextMonthHandler = ()=>{
+        let m = selectedMonth+1;
+        if(m <= 11){
+            setMonth( selectedYear, m );
+        }else {
+            setMonth( selectedYear+1, 0 );
+        }
     }
 
     useEffect(
@@ -140,14 +153,21 @@ function Calendar(props){
     )
 
     useEffect(
-        ()=>{getPlannerList().then( (re)=>{ console.log("plannerList") } );}
+        ()=>{ getPlannerList(); }
     , [] )
 
     return (
         <div className="calendar_wrap">
             <button onClick={ () =>{ setSidebar() }} className="menuBtn"> <img src={menu} /> </button>
-            <Sidebar plannerList={plannerList} onMouseOver={ ()=>{console.log("open")} } onMouseOut={()=>{ console.log("close") }} />
-            <Calendar_Controller selectedYear={selectedYear} selectedMonth={selectedMonth} setMonth={setMonth} year={year} />
+            <Sidebar plannerList={plannerList} />
+            <Calendar_Controller
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                setMonth={setMonth}
+                year={year}
+                prevMonthHandler={prevMonthHandler}
+                nextMonthHandler={nextMonthHandler}
+            />
             <Calendar_Header week={week} />
             <Calendar_Body
                 monthData={monthData}
@@ -165,8 +185,11 @@ function Calendar(props){
                     selectedMonth={selectedMonth}
                     selectedDay={selectedDay}
                     year={year}
-                    todoList={todoList}
-                 /> : null }
+                    prevMonthHandler={prevMonthHandler}
+                    nextMonthHandler={nextMonthHandler}
+                    selectedPno={selectedPno}
+                 /> : null
+            }
         </div>
     )
 }
@@ -179,31 +202,13 @@ function Calendar_Controller(props){
             </div>
 
             <div className="calender_controller">
-                <button onClick={
-                    ()=>{
-                        let m = props.selectedMonth-1;
-                        if(m >= 0){
-                            props.setMonth( props.selectedYear, m );
-                        }else {
-                            props.setMonth( props.selectedYear-1, 11 );
-                        }
-                    }
-                } className="controllerBtn">
+                <button onClick={ ()=>{props.prevMonthHandler() } } className="controllerBtn">
                     <img src={leftArrow} />
                 </button>
                 <div className="display_month">
                     <h3> {props.year[props.selectedMonth]}</h3>
                 </div>
-                <button onClick={
-                    ()=>{
-                        let m = props.selectedMonth+1;
-                        if(m <= 11){
-                            props.setMonth( props.selectedYear, m );
-                        }else {
-                            props.setMonth( props.selectedYear+1, 0 );
-                        }
-                    }
-                } className="controllerBtn">
+                <button onClick={ ()=>{ props.nextMonthHandler() } } className="controllerBtn">
                     <img src={rightArrow} />
                 </button>
             </div>

@@ -2,13 +2,12 @@ import react, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styles from '../css/dayModal.css';
+import axios from 'axios';
 
 let lastDay = 0;
 let selectedYear;
 let selectedMonth;
 function DayModal(props) {
-    console.log(props.todoList);
-
     const year = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
     const stella = [
         "/img/stars/염소자리_icon4.png",
@@ -26,6 +25,15 @@ function DayModal(props) {
     ];
 
     const [ selectedDay, setSelectedDay ] = useState(props.selectedDay);
+    const [ todoList, setTodoList ] = useState([]);
+
+    async function getDayList(){
+        const res = await axios.get(`/todo/list/day?pno=${props.selectedPno}&year=${selectedYear}&month=${selectedMonth+1}&day=${selectedDay}`);
+        let list = [...res.data];
+        setTodoList(list);
+    }
+
+    useEffect( ()=>{getDayList()}, [selectedDay] );
 
     function getStellaIndex( month, day ){
         let value = month*100 + day;
@@ -43,6 +51,17 @@ function DayModal(props) {
         else if( value <= 1224 ){ return 11; }
     }
 
+    async function checked( tno, isCompleted ){
+        let data = {
+            "tno" : tno,
+            "completed" : isCompleted
+        }
+        const res = await axios.put('/todo/completed', data);
+        if(res.data==1){
+            getDayList();
+        }
+    }
+
     selectedYear = props.selectedYear;
     selectedMonth = props.selectedMonth;
 
@@ -54,6 +73,7 @@ function DayModal(props) {
             change++;
         }else{
             change = 1;
+            props.nextMonthHandler();
         }
 
         setSelectedDay(change);
@@ -66,6 +86,7 @@ function DayModal(props) {
             change--;
         }else{
             change = lastDay;
+            props.prevMonthHandler();
         }
 
         setSelectedDay(change);
@@ -109,10 +130,11 @@ function DayModal(props) {
             </div>
              <div className="body_contents">
                 {
-                    props.todoList.map( ( el, i ) => {
+                    todoList.map( ( el, i ) => {
                         return (
                             <div className={el.completed ? "completed" : "todo"} key={el.title + i}>
-                                <span> <img src="/img/ect/toggle.png" className="todo_toggle" onClick={ (e)=>{ rotateToggle(e); } } /> {el.title}</span> <span> {el.completed ? "completed" : "before"} </span>
+                                <span> <img src="/img/ect/toggle.png" className="todo_toggle" onClick={ (e)=>{ rotateToggle(e); } } /> {el.title}</span>
+                                <span className="todo_completed" onClick={ ()=>{ checked( el.tno, !el.completed ); } }> {el.completed ? "completed" : "before"} </span>
                             </div>
                         )
                     } )

@@ -139,3 +139,7 @@
 .modalBtn:hover{
     color : #ffc9c1;
 }
+
+.todo_completed{
+    cursor : pointer;
+}

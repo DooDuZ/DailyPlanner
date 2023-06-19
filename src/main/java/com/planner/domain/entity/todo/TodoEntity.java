@@ -52,7 +52,7 @@ public class TodoEntity extends BaseEntity {
     public TodoDTO toDTO(){
         return TodoDTO.builder().tNo(this.tNo).text(this.text)
                 .title(this.title).sTime(this.sTime).eTime(this.eTime)
-                .isCompleted(this.isCompleted).opener(this.opener.getUNo()).closer( (this.closer == null) ? 0 : this.closer.getUNo() )
+                .completed(this.isCompleted).opener(this.opener.getUNo()).closer( (this.closer == null) ? 0 : this.closer.getUNo() )
                 .pno(this.plannerEntity.getPNo()).openerName(this.opener.getUId()).status(1)
                 .closerName(this.closer== null ? "" : this.closer.getUId()).build();
     }

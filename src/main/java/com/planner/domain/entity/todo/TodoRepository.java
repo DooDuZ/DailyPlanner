@@ -10,4 +10,7 @@ import java.util.List;
 public interface TodoRepository extends JpaRepository<TodoEntity, Integer> {
     @Query(value = "select * from todo where p_no=:pno and s_time like :date%", nativeQuery = true)
     public List<TodoEntity> findByMonth(int pno, String date);
+
+    @Query(value = "select * from todo where p_no=:pno and s_time like :date%", nativeQuery = true)
+    public List<TodoEntity> findByDay(int pno, String date);
 }
