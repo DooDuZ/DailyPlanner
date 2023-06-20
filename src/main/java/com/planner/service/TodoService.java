@@ -135,8 +135,6 @@ public class TodoService {
             }
         }
 
-        log.info("getPersonalList {}", todoList);
-
         return todoList;
     }
 
@@ -314,8 +312,6 @@ public class TodoService {
         for(TodoEntity entity : entityList){
             todoList.add(entity.toDTO());
         }
-
-        log.info("getDayList - return {}" , todoList);
 
         return todoList;
     }

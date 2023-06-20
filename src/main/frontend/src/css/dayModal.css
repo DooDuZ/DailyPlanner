@@ -13,6 +13,7 @@
     width : 90%;
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.4);
+    overflow : hidden;
 }
 
 .body_contents{
@@ -99,6 +100,7 @@
 .body_top_img img{
     width : 30px;
     height : 30px;
+    cursor : pointer;
 }
 
 .completed, .todo{

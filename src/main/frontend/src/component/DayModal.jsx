@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import styles from '../css/dayModal.css';
 import axios from 'axios';
 import Toggle from './Toggle.jsx';
+import Write from './Write.jsx';
 
 let lastDay = 0;
 let selectedYear;
@@ -38,7 +39,7 @@ function DayModal(props) {
             }
             return e1.completed - e2.completed;
         })
-        console.log(list);
+
         setTodoList(list);
     }
 
@@ -101,6 +102,16 @@ function DayModal(props) {
         setSelectedDay(change);
     }
 
+    const openWrite = () => {
+        const write = document.querySelector('.write_wrap');
+        write.style.right = '0';
+    }
+
+    const closeWrite = () => {
+        const write = document.querySelector('.write_wrap');
+        write.style.right = '-480px';
+    }
+
     return (
       <Modal
         {...props}
@@ -130,7 +141,11 @@ function DayModal(props) {
         <Modal.Body className="dayModal_body">
             <div className="body_top">
                  <div className="body_top_title"> Todo List </div>
-                 <div className="body_top_img"> <img src="/img/ect/plusbtn_pink.png" /> </div>
+                 <div className="body_top_img">
+                    <img src="/img/ect/plusbtn_pink.png"
+                        onClick={openWrite}
+                    />
+                 </div>
             </div>
              <div className="body_contents">
                 {
@@ -145,6 +160,7 @@ function DayModal(props) {
                     })
                 }
              </div>
+             <Write onHide={closeWrite} />
         </Modal.Body>
         <Modal.Footer className="dayModal_footer">
           <button onClick={props.onHide} className="modalBtn">Close</button>
