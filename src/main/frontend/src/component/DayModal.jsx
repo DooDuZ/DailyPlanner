@@ -5,6 +5,7 @@ import styles from '../css/dayModal.css';
 import axios from 'axios';
 import Toggle from './Toggle.jsx';
 import Write from './Write.jsx';
+import Update from './Update.jsx';
 
 let lastDay = 0;
 let selectedYear;
@@ -28,6 +29,7 @@ function DayModal(props) {
 
     const [ selectedDay, setSelectedDay ] = useState(props.selectedDay);
     const [ todoList, setTodoList ] = useState([]);
+    const [ selectedTodo, setSelectedTodo ] = useState({});
 
     async function getDayList(){
         const res = await axios.get(`/todo/list/day?pno=${props.selectedPno}&year=${selectedYear}&month=${selectedMonth+1}&day=${selectedDay}`);
@@ -112,6 +114,16 @@ function DayModal(props) {
         write.style.right = '-480px';
     }
 
+    const openUpdate = () => {
+        const update = document.querySelector('.update_wrap');
+        update.style.right = '0';
+    }
+
+    const closeUpdate = () => {
+        const update = document.querySelector('.update_wrap');
+        update.style.right = '-480px';
+    }
+
     return (
       <Modal
         {...props}
@@ -155,12 +167,15 @@ function DayModal(props) {
                                 todo={el}
                                 key={el.title + i}
                                 checked={checked}
+                                openUpdate = {openUpdate}
+                                loadData = { ()=>{ setSelectedTodo(el) }}
                             />
                         )
                     })
                 }
              </div>
              <Write onHide={closeWrite} />
+             <Update onHide={closeUpdate} selectedTodo={selectedTodo} />
         </Modal.Body>
         <Modal.Footer className="dayModal_footer">
           <button onClick={props.onHide} className="modalBtn">Close</button>

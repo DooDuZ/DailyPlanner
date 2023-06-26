@@ -90,6 +90,20 @@
     height : 160px;
 }
 
+.updateBtn{
+    background: #f65677;
+    border: none;
+    border-radius: 15px;
+    color: #000;
+    font-weight: 700;
+    height: 30px;
+    width: 54px;
+    color: #fff;
+    position : absolute;
+    right: 55px;
+    top: 70px;
+}
+
 .toggle_body_text::-webkit-scrollbar{width: 3px;}
 .toggle_body_text::-webkit-scrollbar-track{ background-color: grey; border-radius: 10px; box-shadow: inset 0px 0px 5px white; display : none;}
 .toggle_body_text::-webkit-scrollbar-thumb{ background-color: #eeeeee; border-radius: 10px; }

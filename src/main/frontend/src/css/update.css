@@ -1,0 +1,77 @@
+.update_wrap{
+    width : 450px;
+    height : 500px;
+    margin : 0;
+    padding : 10px;
+    position : absolute;
+    z-index : 3;
+    top : 0;
+    right : -480px;
+    transition : all linear 0.3s;
+    background-color : #ffd2ce;
+    border-radius : 10px;
+    font-family : 'Noto Sans KR';
+    font-weight : normal;
+    color : #fff;
+    font-weight : bold;
+}
+
+.update_info input{
+    width: 390px;
+    height: 40px;
+    border-radius: 10px;
+    padding-left: 10px;
+    font-size : 17px;
+    margin : 3px 0 3px 0;
+    border : 1px solid #eee;
+}
+
+.update_btnBox{
+    display : flex;
+    justify-content : space-between;
+    align-items : center;
+    padding : 2px;
+}
+
+.update_hideBtn {
+    width : 20px;
+    height : 20px;
+}
+
+.update_wrap textarea{
+    width: 430px;
+    border-radius: 10px;
+    height: 280px;
+    padding: 10px;
+    font-size: 17px;
+    border : 1px solid #eee;
+}
+
+.update_wrap span{
+    font-size : 18px;
+}
+
+.submitBox{
+    display : flex;
+    justify-content : flex-end;
+}
+
+.submitBtn{
+    background: #fdb5b1;
+    border: none;
+    border-radius: 15px;
+    color: #000;
+    font-weight: 700;
+    height: 30px;
+    width: 54px;
+    color: #fff;
+}
+
+.submitBtn:hover{
+    color : black;
+}
+
+.form-check-input:checked {
+    background-color: #fdacaa !important;
+    border-color: #fcbdb7 !important;
+}

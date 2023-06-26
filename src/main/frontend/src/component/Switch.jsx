@@ -1,6 +1,7 @@
+import react, {useEffect} from 'react';
 import Form from 'react-bootstrap/Form';
 
-function Switch() {
+function Switch(props) {
 
   return (
     <Form>
@@ -8,6 +9,12 @@ function Switch() {
         type="switch"
         id="custom-switch"
         label="완료"
+        checked={props.checked}
+        onClick = { (e)=>{
+            // console.log(e.target.value);
+            e.target.value = !props.checked;
+            props.setChecked();
+        }}
       />
     </Form>
   );

@@ -49,6 +49,12 @@ export default function Toggle(props){
                 <div className = "toggle_right" onClick={ ()=>{ props.checked( props.todo.tno, !props.todo.completed );} }> {props.todo.completed ? "completed" : "before"} </div>
             </div>
             <div className="toggle_body">
+                <button className="updateBtn" onClick={ ()=>{
+                        props.loadData();
+                        props.openUpdate();
+                }} >
+                    수정
+                </button>
                 <div className="toggle_body_text">
                     <div className="toggle_body_info">
                         <span> 발행 : {props.todo.openerName} </span>

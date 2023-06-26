@@ -2,13 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../css/write.css';
 import Switch from './Switch.jsx';
 
-/*
-    import Editor from '../toast/editor.jsx'
-    import '@toast-ui/editor/dist/toastui-editor.css';
-*/
-
 export default function Write(props){
-
     return (
         <div className="write_wrap">
             <div className="write_btnBox">
