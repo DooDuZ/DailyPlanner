@@ -173,7 +173,7 @@ public class TodoService {
 
     @Transactional
     public int updateTodo(TodoDTO todoDTO){
-        log.info("updateTodo", todoDTO);
+        log.info("updateTodo {}", todoDTO);
 
         if(!checkData(todoDTO)){ return -1; }
 
@@ -183,6 +183,7 @@ public class TodoService {
         if(!todoOptional.isPresent()){ return 2; } // 존재하지 않는 기록 ex)작업 중 누군가 삭제한 경우
 
         TodoEntity todoEntity = todoOptional.get();
+
         PlannerEntity plannerEntity;
         try{
             plannerEntity = todoEntity.getPlannerEntity();

@@ -16,7 +16,6 @@ public class TodoController {
     public int createTodo(@RequestBody TodoDTO todoDTO){
         return todoService.createTodo(todoDTO);
     }
-
     @PutMapping("/completed")
     public int completed(@RequestBody TodoDTO todoDTO){
         return todoService.completed(todoDTO);

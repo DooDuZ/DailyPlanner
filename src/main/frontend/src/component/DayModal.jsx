@@ -129,6 +129,7 @@ function DayModal(props) {
         {...props}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop="static"
       >
         <div className = "stella_img">
             <img src= { stella[getStellaIndex( props.selectedMonth+1, selectedDay )]} />
@@ -174,8 +175,8 @@ function DayModal(props) {
                     })
                 }
              </div>
-             <Write onHide={closeWrite} />
-             <Update onHide={closeUpdate} selectedTodo={selectedTodo} />
+             <Write onHide={closeWrite} selectedPno={props.selectedPno} getDayList={getDayList} />
+             <Update onHide={closeUpdate} selectedTodo={selectedTodo} selectedPno={props.selectedPno} getDayList={getDayList} />
         </Modal.Body>
         <Modal.Footer className="dayModal_footer">
           <button onClick={props.onHide} className="modalBtn">Close</button>
