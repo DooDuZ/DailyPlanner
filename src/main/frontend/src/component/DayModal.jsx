@@ -31,13 +31,26 @@ function DayModal(props) {
     const [ todoList, setTodoList ] = useState([]);
     const [ selectedTodo, setSelectedTodo ] = useState({});
 
-    let tnoList = [];
+    let tnoList = new Set();
 
     const checkboxHandler = ()=>{
         const checkboxes = document.querySelectorAll('.check_wrap');
+
+        // 하위 컴포넌트 state 변경 문제로 잠시 주석처리
+        // tnoList.clear();
+
         checkboxes.forEach( (el)=>{
             el.style.display = (el.style.display == 'block' ? 'none' : 'block');
         } );
+    }
+
+    const listHandler = ( value, bool )=>{
+        if(bool){
+            tnoList.add(value);
+        }else{
+            tnoList.delete(value);
+        }
+        console.log(tnoList);
     }
 
     async function getDayList(){
@@ -180,6 +193,7 @@ function DayModal(props) {
                                 checked={checked}
                                 openUpdate = {openUpdate}
                                 loadData = { ()=>{ setSelectedTodo(el) }}
+                                listHandler = { listHandler }
                             />
                         )
                     })

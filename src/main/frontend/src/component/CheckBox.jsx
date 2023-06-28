@@ -7,7 +7,7 @@ export default function CheckBox( props ){
 
     return (
         <div className="check_wrap">
-            <label className={checked ? "check_btn_label_true" : "check_btn_label_false"}>
+            <label className={checked ? "check_btn_label_true" : "check_btn_label_false"} onClick={ ()=>{ props.listHandler(props.tno, !checked)} }>
                 <input type="checkbox" className="check_btn" checked={checked} onClick={ () => {setChecked(!checked);} } />
             </label>
         </div>

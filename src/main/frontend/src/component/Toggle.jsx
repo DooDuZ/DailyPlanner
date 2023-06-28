@@ -43,7 +43,7 @@ export default function Toggle(props){
         <div className="toggle_wrap">
             <div className={ (props.todo.completed ? "completed" : "todo") + " toggle_top"}>
                 <div className = "toggle_left">
-                    <CheckBox />
+                    <CheckBox tno={props.todo.tno} listHandler={props.listHandler} />
                     <img src="/img/etc/toggle2.png" className="toggle_btn" onClick={ (e)=>{ rotateBtn(e); } } />
                     <div className="toggle_time"> { time } </div>
                     <div className="toggle_title"> { props.todo.title } </div>
