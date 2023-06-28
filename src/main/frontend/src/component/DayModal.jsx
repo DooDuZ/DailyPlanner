@@ -31,6 +31,15 @@ function DayModal(props) {
     const [ todoList, setTodoList ] = useState([]);
     const [ selectedTodo, setSelectedTodo ] = useState({});
 
+    let tnoList = [];
+
+    const checkboxHandler = ()=>{
+        const checkboxes = document.querySelectorAll('.check_wrap');
+        checkboxes.forEach( (el)=>{
+            el.style.display = (el.style.display == 'block' ? 'none' : 'block');
+        } );
+    }
+
     async function getDayList(){
         const res = await axios.get(`/todo/list/day?pno=${props.selectedPno}&year=${selectedYear}&month=${selectedMonth+1}&day=${selectedDay}`);
         let list = [...res.data];
@@ -136,7 +145,7 @@ function DayModal(props) {
         </div>
         <Modal.Header className="dayModal_header">
             <div className="dateBox">
-                <img src="/img/ect/whiteArrow.png" className="modalController" onClick={ ()=>{
+                <img src="/img/etc/whiteArrow.png" className="modalController" onClick={ ()=>{
                     prevDayHandler(selectedDay);
                 }}/>
                 <div className="dayBox">
@@ -146,7 +155,7 @@ function DayModal(props) {
                     <p className="modalYear">{props.selectedYear}</p>
                     <p className="modalMonth">{year[props.selectedMonth]}</p>
                 </div>
-                <img src="/img/ect/whiteArrow.png" className="modalController rightBtn" onClick={ ()=>{
+                <img src="/img/etc/whiteArrow.png" className="modalController rightBtn" onClick={ ()=>{
                     nextDayHandler(selectedDay);
                 }}/>
             </div>
@@ -155,12 +164,13 @@ function DayModal(props) {
             <div className="body_top">
                  <div className="body_top_title"> Todo List </div>
                  <div className="body_top_img">
-                    <img src="/img/ect/plusbtn_pink.png"
+                    <img src="/img/etc/plusbtn_pink.png"
                         onClick={openWrite}
                     />
                  </div>
             </div>
              <div className="body_contents">
+                <button onClick={checkboxHandler}> test </button>
                 {
                     todoList.map( ( el, i ) => {
                         return (
@@ -175,8 +185,23 @@ function DayModal(props) {
                     })
                 }
              </div>
-             <Write onHide={closeWrite} selectedPno={props.selectedPno} getDayList={getDayList} />
-             <Update onHide={closeUpdate} selectedTodo={selectedTodo} selectedPno={props.selectedPno} getDayList={getDayList} />
+             <Write
+                onHide={closeWrite}
+                selectedPno={props.selectedPno}
+                getDayList={getDayList}
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                selectedDay={selectedDay}
+            />
+             <Update
+                onHide={closeUpdate}
+                selectedTodo={selectedTodo}
+                selectedPno={props.selectedPno}
+                getDayList={getDayList}
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                selectedDay={selectedDay}
+            />
         </Modal.Body>
         <Modal.Footer className="dayModal_footer">
           <button onClick={props.onHide} className="modalBtn">Close</button>

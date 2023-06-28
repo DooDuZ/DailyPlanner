@@ -1,0 +1,64 @@
+/*
+input.check_btn{
+  display:none;
+}
+
+input.check_btn + label{
+  cursor:pointer;
+}
+
+input.check_btn + label > span{
+  vertical-align: middle;
+  padding-left: 5px;
+}
+*/
+/* label:before에 체크하기 전 상태 CSS */
+
+/*
+input.check_btn + label:before{
+  content:"";
+  display:inline-block;
+  width:17px;
+  height:17px;
+  border:2px solid #F47C7C;
+  border-radius: 4px;
+  vertical-align:middle;
+}
+*/
+/* label:before에 체크 된 상태 CSS */
+/*
+input.check_btn:checked + label:before{
+  content:"";
+  background-color:#F47C7C;
+  border-color:#F47C7C;
+  background-image: url("../../public/img/etc/check_icon.png");
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+*/
+
+.check_wrap{
+    display : none;
+}
+
+.check_btn{
+    display : none;
+}
+
+.check_btn_label_false{
+    background-image : url("../../public/img/etc/emptybox.png");
+    width:20px;
+    height:20px;
+    background-size : cover;
+    position: relative;
+    top: 3px;
+}
+
+.check_btn_label_true{
+    background-image : url("../../public/img/etc/checkedbox.png");
+    width:20px;
+    height:20px;
+    background-size : cover;
+    position: relative;
+    top: 3px;
+}

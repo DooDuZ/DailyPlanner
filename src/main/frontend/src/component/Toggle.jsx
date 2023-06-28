@@ -1,5 +1,6 @@
 import react, {useState, useEffect} from 'react';
 import styles from '../css/toggle.css';
+import CheckBox from './CheckBox.jsx';
 
 export default function Toggle(props){
     const [ open, setOpen ] = useState(false);
@@ -42,7 +43,8 @@ export default function Toggle(props){
         <div className="toggle_wrap">
             <div className={ (props.todo.completed ? "completed" : "todo") + " toggle_top"}>
                 <div className = "toggle_left">
-                    <img src="/img/ect/toggle2.png" className="toggle_btn" onClick={ (e)=>{ rotateBtn(e); } } />
+                    <CheckBox />
+                    <img src="/img/etc/toggle2.png" className="toggle_btn" onClick={ (e)=>{ rotateBtn(e); } } />
                     <div className="toggle_time"> { time } </div>
                     <div className="toggle_title"> { props.todo.title } </div>
                 </div>
