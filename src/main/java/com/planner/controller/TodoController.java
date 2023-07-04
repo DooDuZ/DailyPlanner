@@ -4,7 +4,11 @@ import com.planner.domain.dto.TodoDTO;
 import com.planner.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/todo")
@@ -40,6 +44,11 @@ public class TodoController {
     @DeleteMapping("/duty")
     public int deleteTodo(@RequestBody TodoDTO todoDTO){
         return todoService.deleteTodo(todoDTO);
+    }
+
+    @DeleteMapping("/dutyList")
+    public Map<Integer, Integer> deleteTodoList(@RequestBody Map<String, Object> data){
+        return todoService.deleteTodoList((List) data.get("list"));
     }
 
     @GetMapping("/month-list")

@@ -128,3 +128,24 @@
 .todo_completed{
     cursor : pointer;
 }
+
+.show_checkbox_btn{
+    background: #fff;
+    color: #000;
+    width: 55px;
+    height: 30px;
+    border: none;
+    border-radius: 15px;
+    font-size: 13px;
+    margin-right : 10px;
+}
+
+.deleteTodo_btn{
+    background: #b11a00;
+    color: #fff;
+    width: 55px;
+    height: 30px;
+    border: none;
+    border-radius: 15px;
+    font-size: 13px;
+}

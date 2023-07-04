@@ -11,7 +11,6 @@ function Switch(props) {
         label="완료"
         checked={props.checked}
         onClick = { (e)=>{
-            // console.log(e.target.value);
             e.target.value = !props.checked;
             props.setChecked();
         }}

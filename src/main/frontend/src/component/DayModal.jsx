@@ -30,18 +30,13 @@ function DayModal(props) {
     const [ selectedDay, setSelectedDay ] = useState(props.selectedDay);
     const [ todoList, setTodoList ] = useState([]);
     const [ selectedTodo, setSelectedTodo ] = useState({});
+    const [ checkVisible, setCheckVisible ] = useState(false);
 
     let tnoList = new Set();
 
     const checkboxHandler = ()=>{
-        const checkboxes = document.querySelectorAll('.check_wrap');
-
-        // 하위 컴포넌트 state 변경 문제로 잠시 주석처리
-        // tnoList.clear();
-
-        checkboxes.forEach( (el)=>{
-            el.style.display = (el.style.display == 'block' ? 'none' : 'block');
-        } );
+        tnoList.clear();
+        setCheckVisible(!checkVisible);
     }
 
     const listHandler = ( value, bool )=>{
@@ -50,7 +45,6 @@ function DayModal(props) {
         }else{
             tnoList.delete(value);
         }
-        console.log(tnoList);
     }
 
     async function getDayList(){
@@ -146,6 +140,22 @@ function DayModal(props) {
         update.style.right = '-480px';
     }
 
+    const deleteTodo = () => {
+        if(!window.confirm( "선택 목록을 삭제하시겠습니까?" )){
+            return;
+        }else if(tnoList.size==0){
+            alert("선택된 목록이 없습니다.");
+            return;
+        }
+        console.log("돌이킬 수 없다 진자");
+        axios.delete(`/todo/dutyList`, { data : {  "list" : Array.from(tnoList)  } }  )
+            .then( (re) => {
+                console.log(re);
+                checkboxHandler();
+                getDayList();
+            });
+    }
+
     return (
       <Modal
         {...props}
@@ -183,7 +193,8 @@ function DayModal(props) {
                  </div>
             </div>
              <div className="body_contents">
-                <button onClick={checkboxHandler}> test </button>
+                <button onClick={checkboxHandler} className="show_checkbox_btn" > select </button>
+                { checkVisible ? <button onClick={checkboxHandler} className="deleteTodo_btn" onClick={deleteTodo} > delete </button> : null }
                 {
                     todoList.map( ( el, i ) => {
                         return (
@@ -194,6 +205,7 @@ function DayModal(props) {
                                 openUpdate = {openUpdate}
                                 loadData = { ()=>{ setSelectedTodo(el) }}
                                 listHandler = { listHandler }
+                                checkVisible = {checkVisible}
                             />
                         )
                     })

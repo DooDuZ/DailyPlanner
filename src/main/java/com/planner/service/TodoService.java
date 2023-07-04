@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -315,5 +313,15 @@ public class TodoService {
         }
 
         return todoList;
+    }
+    public Map<Integer, Integer> deleteTodoList(List<Integer> tnoList){
+        Map<Integer, Integer> resultMap = new HashMap<>();
+
+        for(Integer tno : tnoList){
+            int result = deleteTodo(TodoDTO.builder().tNo(tno).build());
+            resultMap.put(tno, result);
+        }
+
+        return resultMap;
     }
 }

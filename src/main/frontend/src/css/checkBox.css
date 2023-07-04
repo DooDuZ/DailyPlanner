@@ -37,10 +37,6 @@ input.check_btn:checked + label:before{
 }
 */
 
-.check_wrap{
-    display : none;
-}
-
 .check_btn{
     display : none;
 }
