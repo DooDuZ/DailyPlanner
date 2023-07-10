@@ -26,7 +26,7 @@ export default function Index(props){
     useEffect( ()=> { getUser() }, [] );
 
     return(
-        <div>
+        <div className="app_wrap">
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Main setIsLogIn={setIsLogIn} />} />

@@ -21,6 +21,10 @@
     font-style: normal;
 }
 
+.app_wrap{
+    position : relative;
+}
+
 .footer{
     height : 200px;
     background-color : #1f4e62;
