@@ -11,8 +11,6 @@ export default function Toggle(props){
     // 종료 시간
     let endTime = getMonth( props.todo.etime ) + " " + getSimpleDate( props.todo.etime );
 
-    console.log(props.todo);
-
     const rotateBtn = (e)=>{
         const btn = e.target;
         const body = e.target.parentNode.parentNode.parentNode;

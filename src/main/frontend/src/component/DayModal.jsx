@@ -147,7 +147,7 @@ function DayModal(props) {
             alert("선택된 목록이 없습니다.");
             return;
         }
-
+        console.log("돌이킬 수 없다 진자");
         axios.delete(`/todo/dutyList`, { data : {  "list" : Array.from(tnoList)  } }  )
             .then( (re) => {
                 console.log(re);
